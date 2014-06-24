@@ -75,6 +75,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -285,8 +287,10 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private static MediaPlayer areLEDsWhite;
 	private static MediaPlayer sdIOTest;
 	private static MediaPlayer alertSound;
+	private static MediaPlayer restartApp;
 	private int height;
 	private String CurrentFirmwareVersion = "PIXL0008";
+	private OnSharedPreferenceChangeListener matrixChangedListener;
 	
 	
 
@@ -330,7 +334,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			Grove5_2TextView = (TextView) findViewById(R.id.Grove5_2);
 			
 		
-			height = getResources().getDisplayMetrics().heightPixels;
+			//height = getResources().getDisplayMetrics().heightPixels;
 			
 		//let's get the app version so we'll know if we need to add new animations to the user's app   
 	        PackageInfo pinfo;
@@ -356,7 +360,36 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
             Log.v(tag, e.getMessage());
         }
         
-        matrix_model = 3; //normal pixel 32x32
+     
+        
+        pixelRadioGroup_ = (RadioGroup) findViewById(R.id.pixelRadioGroup);
+        pixelRadio_ = (RadioButton) findViewById(R.id.pixelRadio);
+        superPixelRadio_ = (RadioButton) findViewById(R.id.superPixelRadio);
+        
+        pixelRadio_.setEnabled(false);
+        superPixelRadio_.setEnabled(false);
+        
+        matrixChangedListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			  public void onSharedPreferenceChanged(SharedPreferences prefs, String selected_matrix) {
+			  // showToast("matrix model:" + matrix_model);
+			   setPreferences();  
+			    if (matrix_model == 3) {
+			    	 pixelRadio_.setChecked(true);
+			    	 superPixelRadio_.setChecked(false);
+			    }
+			    else { //it's super pixel
+			    	pixelRadio_.setChecked(false);
+			    	superPixelRadio_.setChecked(true);
+			    }
+			    
+			   showToast(getString(R.string.LEDMatrixChanged));
+			   restartApp.start(); //play the sound
+			   startButton_.setVisibility(View.INVISIBLE);
+			    
+			  }
+		};
+			
+	    prefs.registerOnSharedPreferenceChangeListener(matrixChangedListener);
         
         //******** preferences code
         resources = this.getResources();
@@ -372,38 +405,52 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
  		
  		context = getApplicationContext();
  		baseContext = getBaseContext();
+ 		
+ 		 if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH") || Locale.getDefault().getLanguage().equals("zh-TW")) 
+ 	    	  beginTestSound = MediaPlayer.create(MainActivity.this, R.raw.beginning_test_chinese);
+ 	     else beginTestSound = MediaPlayer.create(MainActivity.this, R.raw.beginning_test_english);
+ 	    	  
+ 	      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH") || Locale.getDefault().getLanguage().equals("zh-TW")) 
+ 	    	  checkWhiteLEDsSound = MediaPlayer.create(MainActivity.this, R.raw.check_leds_white_chinese);
+ 	     else checkWhiteLEDsSound = MediaPlayer.create(MainActivity.this, R.raw.check_leds_white_english);
+ 	      
+ 	      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
+ 	    	  endTestSound = MediaPlayer.create(MainActivity.this, R.raw.testing_complete_chinese);
+ 	     else endTestSound = MediaPlayer.create(MainActivity.this, R.raw.testing_complete_english);
+ 	      
+ 	      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
+ 	    	  areLEDsWhite = MediaPlayer.create(MainActivity.this, R.raw.are_leds_white_chinese);
+ 	     else areLEDsWhite = MediaPlayer.create(MainActivity.this, R.raw.are_leds_white_english);
+ 	      
+ 	      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
+ 	    	  sdIOTest = MediaPlayer.create(MainActivity.this, R.raw.sd_and_io_test_chinese);
+ 	     else sdIOTest = MediaPlayer.create(MainActivity.this, R.raw.sd_and_io_test_english);
+ 	      
+ 	      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
+ 	    	  alertSound = MediaPlayer.create(MainActivity.this, R.raw.alert);
+ 	     else alertSound = MediaPlayer.create(MainActivity.this, R.raw.alert);
+ 	      
+ 	      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
+ 	    	  restartApp = MediaPlayer.create(MainActivity.this, R.raw.restart_app_chinese);
+ 	     else restartApp = MediaPlayer.create(MainActivity.this, R.raw.restart_app_english);
+ 		
+ 		
         
- 		pixelRadioGroup_ = (RadioGroup) findViewById(R.id.pixelRadioGroup);
-
-      /*  OnClickListener listener = new OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                    RadioButton rb = (RadioButton) v;
-                    Toast.makeText(MainActivity.this, rb.getText(), 
-                    Toast.LENGTH_SHORT).show();
-             }
-       };
-       
-       */
-
-       pixelRadio_ = (RadioButton) findViewById(R.id.pixelRadio);
-     //  pixelRadio_.setOnClickListener(listener);
-
-       superPixelRadio_ = (RadioButton) findViewById(R.id.superPixelRadio);
+ 		
       // superPixelRadio_.setOnClickListener(listener);
 
-       pixelRadioGroup_.setOnCheckedChangeListener(new OnCheckedChangeListener() 
+      /* pixelRadioGroup_.setOnCheckedChangeListener(new OnCheckedChangeListener() 
        {
            public void onCheckedChanged(RadioGroup group, int checkedId) {
                switch(checkedId){
                    case R.id.pixelRadio:
-                	 matrix_model = 3;
+                	// matrix_model = 3;
                 	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2
         	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
         	    	 frame_length = 2048;
         	    	 currentResolution = 32;
           	  	     selectedFileResolution = 32;
-          	    	// setPreferences();
+          	  
                    break;
 
                    case R.id.superPixelRadio:
@@ -413,35 +460,12 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
           	    	 frame_length = 8192;
           	    	 currentResolution = 128; 
           	    	 selectedFileResolution = 128;
-          	    	// setPreferences();
                    break;
                }
            }
-       });
+       });*/
        
-      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH") || Locale.getDefault().getLanguage().equals("zh-TW")) 
-    	  beginTestSound = MediaPlayer.create(MainActivity.this, R.raw.beginning_test_chinese);
-     else beginTestSound = MediaPlayer.create(MainActivity.this, R.raw.beginning_test_english);
-    	  
-      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH") || Locale.getDefault().getLanguage().equals("zh-TW")) 
-    	  checkWhiteLEDsSound = MediaPlayer.create(MainActivity.this, R.raw.check_leds_white_chinese);
-     else checkWhiteLEDsSound = MediaPlayer.create(MainActivity.this, R.raw.check_leds_white_english);
-      
-      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
-    	  endTestSound = MediaPlayer.create(MainActivity.this, R.raw.testing_complete_chinese);
-     else endTestSound = MediaPlayer.create(MainActivity.this, R.raw.testing_complete_english);
-      
-      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
-    	  areLEDsWhite = MediaPlayer.create(MainActivity.this, R.raw.are_leds_white_chinese);
-     else areLEDsWhite = MediaPlayer.create(MainActivity.this, R.raw.are_leds_white_english);
-      
-      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
-    	  sdIOTest = MediaPlayer.create(MainActivity.this, R.raw.sd_and_io_test_chinese);
-     else sdIOTest = MediaPlayer.create(MainActivity.this, R.raw.sd_and_io_test_english);
-      
-      if ( Locale.getDefault().getLanguage().equals("zh") || Locale.getDefault().getLanguage().equals("zh-CH")|| Locale.getDefault().getLanguage().equals("zh-TW")) 
-    	  alertSound = MediaPlayer.create(MainActivity.this, R.raw.alert);
-     else alertSound = MediaPlayer.create(MainActivity.this, R.raw.alert);
+     
   
  		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 
@@ -816,8 +840,8 @@ private void copyGIF64Source() {
                startButton_.setVisibility(View.GONE);
                checkWhiteLEDsSound.start();
                //pixelRadioGroup_.setVisibility(View.GONE);
-               pixelRadio_.setEnabled(false);
-               superPixelRadio_.setEnabled(false);
+              // pixelRadio_.setEnabled(false);
+              // superPixelRadio_.setEnabled(false);
            }
            else {
         	   //showToast("PIXEL was not found, did you Bluetooth pair?");
@@ -1776,8 +1800,8 @@ private void copyGIF64Source() {
 	  super.onPostExecute(result);
 	  startButton_.setVisibility(View.VISIBLE); //we are done so let's enable the buttons
 	  endTestSound.start();
-	  pixelRadio_.setEnabled(true);
-      superPixelRadio_.setEnabled(true);
+	 // pixelRadio_.setEnabled(true);
+     // superPixelRadio_.setEnabled(true);
 	  //showToast(getString(R.string.factoryTestComplete));
 	  Toast toast16 = Toast.makeText(context, context.getResources().getString(R.string.factoryTestComplete), Toast.LENGTH_LONG);
 	  toast16.show();
@@ -1962,7 +1986,8 @@ private void copyGIF64Source() {
 	    	super.onActivityResult(reqCode, resCode, data);    	
 	    	
 	    	
-	    	if (resCode == WENT_TO_PREFERENCES)  {
+	    	//used to be resCode, changed to reqCode
+	    	if (reqCode == WENT_TO_PREFERENCES)  {
 	    		setPreferences(); //very important to have this here, after the menu comes back this is called, we'll want to apply the new prefs without having to re-start the app
 	    		//showToast("returned from preferences");
 	    	}	
@@ -2033,9 +2058,9 @@ private void copyGIF64Source() {
 	   //  showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
 	     //saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", false);
 	   
-	    /* matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
+	    matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
-	    	        resources.getString(R.string.matrix_default_value))); */
+	    	        resources.getString(R.string.matrix_default_value))); 
 	     
 	   /*  downloadURL_32 = prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.downloadURL_32),
@@ -2117,10 +2142,12 @@ private void copyGIF64Source() {
 	    	 currentResolution = 32;
 	    	 break;
 	     case 3:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //pixelv2
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 	    	 frame_length = 2048;
 	    	 currentResolution = 32;
+	    	 pixelRadio_.setChecked(true);
+	    	// superPixelRadio_.setChecked(false);
 	    	 break;
 	     case 4:
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x32; 
@@ -2162,6 +2189,8 @@ private void copyGIF64Source() {
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
 	    	 frame_length = 8192;
 	    	 currentResolution = 128; 
+	    	 //pixelRadio_.setChecked(false);
+	    	 superPixelRadio_.setChecked(true);
 	    	 break;	 	 		 
 	     default:	    		 
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
@@ -2174,7 +2203,7 @@ private void copyGIF64Source() {
 	         
 	     frame_ = new short [KIND.width * KIND.height];
 		 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
-		 
+	
 		 loadRGB565(); //load the select pic raw565 file
 		 
 	 }
@@ -2231,8 +2260,8 @@ private void copyGIF64Source() {
 			        	 Toast toast15 = Toast.makeText(context, context.getResources().getString(R.string.replaceMatrix), Toast.LENGTH_LONG);
 						 toast15.show();
 						 startButton_.setVisibility(View.VISIBLE); //the test has to be re-started because panel bad so let's re-enable buttons
-						 pixelRadio_.setEnabled(true);
-			             superPixelRadio_.setEnabled(true);
+						 //pixelRadio_.setEnabled(true);
+			             //superPixelRadio_.setEnabled(true);
 						 whiteTestDone = 0;
 						 
 			            break;
@@ -2243,6 +2272,7 @@ private void copyGIF64Source() {
 			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getInstance());
 			//builder.setMessage("Are all the LEDs white?").setPositiveButton("Yes", dialogClickListener)
 			 //   .setNegativeButton("No", dialogClickListener).show();
+			builder.setCancelable(false);
 			
 			builder.setMessage(context.getResources().getString(R.string.allLEDsWhite)).setPositiveButton(context.getResources().getString(R.string.Yes), dialogClickListener)
 		    .setNegativeButton(context.getResources().getString(R.string.No), dialogClickListener).show();
@@ -2370,35 +2400,35 @@ private void copyGIF64Source() {
 			grove5_1_ = grove5_1.read(); 
 			grove5_2_ = grove5_2.read(); 
 			
-			if (grove1_6_ == true) setGrove1_6Text("1: IOIO 6 is High");
-			else setGrove1_6Text("1: IOIO 6 is Low");
+			if (grove1_6_ == true)  setGrove1_6Text(true, "1: IOIO 6 is High"); 
+			else setGrove1_6Text(false, "1: IOIO 6 is Low");
 			
-			if (grove1_35_ == true) setGrove1_35Text("1: IOIO 35 is High");
-			else setGrove1_35Text("1: IOIO 35 is Low");
+			if (grove1_35_ == true) setGrove1_35Text(true,"1: IOIO 35 is High");
+			else setGrove1_35Text(false,"1: IOIO 35 is Low");
 			
-			if (grove2_4_ == true) setGrove2_4Text("2: IOIO 4 is High");
-			else setGrove2_4Text("2: IOIO 4 is Low");
+			if (grove2_4_ == true) setGrove2_4Text(true,"2: IOIO 4 is High");
+			else setGrove2_4Text(false,"2: IOIO 4 is Low");
 			
-			if (grove2_5_ == true) setGrove2_5Text("2: IOIO 5 is High");
-			else setGrove2_5Text("2: IOIO 5 is Low");
+			if (grove2_5_ == true) setGrove2_5Text(true,"2: IOIO 5 is High");
+			else setGrove2_5Text(false,"2: IOIO 5 is Low");
 			
-			if (grove3_31_ == true) setGrove3_31Text("3: IOIO 31 is High");
-			else setGrove3_31Text("3: IOIO 31 is Low");
+			if (grove3_31_ == true) setGrove3_31Text(true,"3: IOIO 31 is High");
+			else setGrove3_31Text(false,"3: IOIO 31 is Low");
 			
-			if (grove3_32_ == true) setGrove3_32Text("3: IOIO 32 is High");
-			else setGrove3_32Text("3: IOIO 32 is Low");
+			if (grove3_32_ == true) setGrove3_32Text(true,"3: IOIO 32 is High");
+			else setGrove3_32Text(false,"3: IOIO 32 is Low");
 			
-			if (grove4_33_ == true) setGrove4_33Text("4: IOIO 33 is High");
-			else setGrove4_33Text("4: IOIO 33 is Low");
+			if (grove4_33_ == true) setGrove4_33Text(true,"4: IOIO 33 is High");
+			else setGrove4_33Text(false,"4: IOIO 33 is Low");
 			
-			if (grove4_34_ == true) setGrove4_34Text("4: IOIO 34 is High");
-			else setGrove4_34Text("4: IOIO 34 is Low");
+			if (grove4_34_ == true) setGrove4_34Text(true,"4: IOIO 34 is High");
+			else setGrove4_34Text(false,"4: IOIO 34 is Low");
 			
-			if (grove5_1_ == true) setGrove5_1Text("5: IOIO 1 is High");
-			else setGrove5_1Text("5: IOIO 1 is Low");
+			if (grove5_1_ == true) setGrove5_1Text(true,"5: IOIO 1 is High");
+			else setGrove5_1Text(false,"5: IOIO 1 is Low");
 			
-			if (grove5_2_ == true) setGrove5_2Text("5: IOIO 2 is High");
-			else setGrove5_2Text("5: IOIO 2 is Low");
+			if (grove5_2_ == true) setGrove5_2Text(true,"5: IOIO 2 is High");
+			else setGrove5_2Text(false,"5: IOIO 2 is Low");
 			
 			
 			Thread.sleep(100);
@@ -2481,92 +2511,112 @@ private void copyGIF64Source() {
 		});
 	}
 	
-	private void setGrove1_6Text(final String str) {
+	private void setGrove1_6Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove1_6TextView.setText(str);
+				if (inputPin == true) Grove1_6TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove1_6TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove1_35Text(final String str) {
+	private void setGrove1_35Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove1_35TextView.setText(str);
+				if (inputPin == true) Grove1_35TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove1_35TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove2_4Text(final String str) {
+	private void setGrove2_4Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove2_4TextView.setText(str);
+				if (inputPin == true) Grove2_4TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove2_4TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove2_5Text(final String str) {
+	private void setGrove2_5Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove2_5TextView.setText(str);
+				if (inputPin == true) Grove2_5TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove2_5TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove3_31Text(final String str) {
+	private void setGrove3_31Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove3_31TextView.setText(str);
+				if (inputPin == true) Grove3_31TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove3_31TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove3_32Text(final String str) {
+	private void setGrove3_32Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove3_32TextView.setText(str);
+				if (inputPin == true) Grove3_32TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove3_32TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove4_33Text(final String str) {
+	private void setGrove4_33Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove4_33TextView.setText(str);
+				if (inputPin == true) Grove4_33TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove4_33TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove4_34Text(final String str) {
+	private void setGrove4_34Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove4_34TextView.setText(str);
+				if (inputPin == true) Grove4_34TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove4_34TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove5_1Text(final String str) {
+	private void setGrove5_1Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove5_1TextView.setText(str);
+				if (inputPin == true) Grove5_1TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove5_1TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}
 	
-	private void setGrove5_2Text(final String str) {
+	private void setGrove5_2Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				Grove5_2TextView.setText(str);
+				if (inputPin == true) Grove5_2TextView.setTextColor(getResources().getColor(R.color.red));
+				else Grove5_2TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
 	}

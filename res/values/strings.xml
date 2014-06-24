@@ -18,9 +18,9 @@
   
    <string name="setupInstructionsStringTitle">Instructions</string>   
      
-    <string name="prefTitle">PIXEL:LED ART Settings</string>
+    <string name="prefTitle">PIXEL Factory Test Settings</string>
     <string name="menu_prefs_title">Settings</string>
-    <string name="prefSummary">PIXEL:LED ART Settings</string>
+    <string name="prefSummary">PIXEL Factory Test Settings</string>
     
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>
@@ -38,12 +38,6 @@
     <string name="artURL3">pixeljoint.com</string> 
     
     <string name="menu_btPair_title">Bluetooth Pair PIXEL | Code 0000 or 4545</string>   
-   
-    <string name="selected_matrix">selected_matrix</string>
-    <string name="matrix">LED Panel Selection</string>
-    <string name="matrixSummary">Select your LED Panel model</string>    
-    <string name="dialogTitleMatrix">LED Panel Selection</string>
-    <string name="matrix_default_value">3</string>   
     
     <string name="fps_override">fps_override</string>
     <string name="FPSOverrideTitle">Frames per Second</string>
@@ -153,8 +147,13 @@
     <string name="incorrectFirmwareMsg">is NOT the latest firmware version, please upgrade to</string>
     
     <string name="SDCardWritePrompt">Writing to PIXEL\'s SD Card, please do not interrupt or leave this app</string>
+    <string name="LEDMatrixChanged">Please close and restart this app now for the new PIXEL model to work correctly</string>
     
-    
+  <string name="selected_matrix">selected_matrix</string>
+    <string name="matrix">PIXEL Type Selection</string>
+    <string name="matrixSummary">Select PIXEL 32x32 or SUPER PIXEL 64x64, you must re-start this app if you change</string>    
+    <string name="dialogTitleMatrix">PIXEL Type Selection</string>
+    <string name="matrix_default_value">3</string>  
     
     
    

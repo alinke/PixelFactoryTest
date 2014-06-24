@@ -18,9 +18,9 @@
    <string name="setupInstructionsString">Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\nPIXEL V2 users may long tap to write to PIXEL for stand alone operation.\n\nAdd your own art by sharing to this app from email, gallery, and other apps.\n\n64x64 animated gifs will only show if SUPER PIXEL 64x64 is selected from settings.</string>
    <string name="setupInstructionsStringTitle">Instructions</string>   
      
-    <string name="prefTitle">PIXEL:LED ART Settings</string>
+    <string name="prefTitle">PIXEL Factory Test Settings</string>
     <string name="menu_prefs_title">Settings</string>
-    <string name="prefSummary">PIXEL:LED ART Settings</string>
+    <string name="prefSummary">PIXEL Factory Test Settings</string>
     
     <string name="scanAll">Show All Album Pics</string>
     <string name="pref_scanAll_default">false</string>
@@ -39,11 +39,7 @@
     
     <string name="menu_btPair_title">Bluetooth Pair PIXEL | Code 0000 or 4545</string>   
    
-    <string name="selected_matrix">selected_matrix</string>
-    <string name="matrix">LED Panel Selection</string>
-    <string name="matrixSummary">Select your LED Panel model</string>    
-    <string name="dialogTitleMatrix">LED Panel Selection</string>
-    <string name="matrix_default_value">3</string>   
+   
     
     <string name="fps_override">fps_override</string>
     <string name="FPSOverrideTitle">Frames per Second</string>
@@ -132,22 +128,31 @@
     <string name="proximity_label">3. Proximity Sensor Port Value:</string>
     <string name="instructions">Instructions: Plug the following sensors into the back of PIXEL: \n\n1. Grove Alcohol Sensor into the Alcohol Port \n2. Grove Button into the Digital I/O Port \n3. Grove IR Proximity Sensor into the Proximity Sensor Port\n4. Grove Potentiometer into the Analog I/O 3V port\n\n</string>
    
-     <string name="StartupMessage">PIXEL 找到固件</string>
+      <string name="StartupMessage">PIXEL 找到固件</string>
      <string name="oneTimeSetup">一时间设置</string>
      <string name="oneTimeSetupBody">复制工厂测试文件到您的本地内存....</string>
-     <string name="pixelNotFound">PIXEL 没有被发现，你有没有蓝牙配对？</string>
-     <string name="bluetoothCode">0000：蓝牙配对使用代码像素</string>
+     <string name="pixelNotFound">PIXEL 没有被发现，你有没有配对蓝牙？</string>
+     <string name="bluetoothCode">0000：蓝牙配对使用密码</string>
      <string name="replaceMatrix">请更换LED矩阵，并再次运行测试</string>
    
-     <string name="factoryTestComplete">电源像素和关闭。如果默认的动画仍然在运行，测试完成。</string>
-     <string name="allLEDsWhite">是否所有的LED白色？</string>
+     <string name="factoryTestComplete">关闭并再打开电源。如果默认的动画仍然在运行，测试完成。</string>
+     <string name="allLEDsWhite">是否所有的LED显示白色？</string>
      <string name="Yes">是的</string>
-     <string name="No">无</string>
-     <string name="RunningWhiteTest">现在，目视检查所有的指示灯都是白色的</string>
-     <string name="setupInstructionsString">这个程序是由工厂测试像素的LED面板，IO连接，并写入一个默认的动画像素的板载microSD卡。首先蓝牙配对，以像素使用代码0000或4545的像素V1。</string>
-     <string name="ioTest_and_sdWrite">SD卡写入过程中，您可能会在SD卡写入测试IO端口</string>
+     <string name="No">不是</string>
+     <string name="RunningWhiteTest">现在，请检查是否所有的LED都是白色的</string>
+     <string name="setupInstructionsString">这个程序被用于PIXEL的LED面板测试，IO连接测试，并写入一个默认的动画数据到板载microSD卡。首先配对蓝牙，蓝牙配对密码为0000或4545。</string>
+     <string name="ioTest_and_sdWrite">板载SD卡正在写入，此时你可以进行IO状态确认</string>
      <string name="correctFirmwareMsg">是最新的固件版本</string>
-     <string name="incorrectFirmwareMsg">是不是最新的固件版本，请升级到</string>
-     <string name="SDCardWritePrompt">写入像素的SD卡，请不要打断或离开这个应用程序</string>
+     <string name="incorrectFirmwareMsg">不是最新的固件版本，请升级到最新版本</string>
+     <string name="SDCardWritePrompt">正在写入数据到SD卡，请不要打断或离开这个应用程序</string>
+     <string name="LEDMatrixChanged">请立即关闭并重新启动该应用程序的新的像素模式能够正常工作</string>
+     
+       <string name="selected_matrix">selected_matrix</string>
+    <string name="matrix">像素类型的选择</string>
+    <string name="matrixSummary">选择32×32像素或超64×64像素，则必须重新启动该应用程序，如果你改变</string>    
+    <string name="dialogTitleMatrix">像素类型的选择</string>
+    <string name="matrix_default_value">3</string>   
+     
+     
     
 </resources>
