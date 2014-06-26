@@ -333,6 +333,8 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			Grove5_1TextView = (TextView) findViewById(R.id.Grove5_1);
 			Grove5_2TextView = (TextView) findViewById(R.id.Grove5_2);
 			
+			Grove1_35TextView.setTextColor(getResources().getColor(R.color.green)); //the analog pins get a different color
+			Grove3_32TextView.setTextColor(getResources().getColor(R.color.green)); //the analog pins get a differnet color
 		
 			//height = getResources().getDisplayMetrics().heightPixels;
 			
@@ -2298,7 +2300,7 @@ private void copyGIF64Source() {
 			Grove	1, 2, 5V, GND	I2C, 5V*/
     	
     	private DigitalInput grove1_6;
-    	private DigitalInput grove1_35;
+    	private AnalogInput grove1_35;
     	private DigitalInput grove2_4;
     	private DigitalInput grove2_5;
     	private DigitalInput grove3_31;
@@ -2309,17 +2311,17 @@ private void copyGIF64Source() {
     	private DigitalInput grove5_2;
     	
     	//private AnalogInput input_;
-		//private AnalogInput ProxInput_;
-		//private AnalogInput AlcoholInput_;
+		private AnalogInput ProxInput_;
+		private AnalogInput AlcoholInput_;
 		//private DigitalOutput led_;
 		//private DigitalInput button_;
 		//private DigitalInput i2cButton_;
 		private boolean grove1_6_;
-		private boolean grove1_35_;
+		//private boolean grove1_35_;
 		private boolean grove2_4_;
 		private boolean grove2_5_;
 		private boolean grove3_31_;
-		private boolean grove3_32_;
+		//private boolean grove3_32_;
 		private boolean grove4_33_;
 		private boolean grove4_34_;
 		private boolean grove5_1_;
@@ -2329,11 +2331,14 @@ private void copyGIF64Source() {
   		protected void setup() throws ConnectionLostException { //we'll always come back here after an intent or loss of connection
   			
   			grove1_6 = ioio_.openDigitalInput(6, DigitalInput.Spec.Mode.PULL_UP);
-  	    	grove1_35 = ioio_.openDigitalInput(35, DigitalInput.Spec.Mode.PULL_UP);
+  	    	//grove1_35 = ioio_.openDigitalInput(35, DigitalInput.Spec.Mode.PULL_UP);
+  	    	
+  	    	//grove1_35 = ioio_.openAnalogInput(35);	
+  	    	
   	    	grove2_4 = ioio_.openDigitalInput(4, DigitalInput.Spec.Mode.PULL_UP);
   	    	grove2_5 = ioio_.openDigitalInput(5, DigitalInput.Spec.Mode.PULL_UP);
   	    	grove3_31 = ioio_.openDigitalInput(31, DigitalInput.Spec.Mode.PULL_UP);
-  	    	grove3_32 = ioio_.openDigitalInput(32, DigitalInput.Spec.Mode.PULL_UP);
+  	    	//grove3_32 = ioio_.openDigitalInput(32, DigitalInput.Spec.Mode.PULL_UP);
   	    	grove4_33 = ioio_.openDigitalInput(33, DigitalInput.Spec.Mode.PULL_UP);
   	    	grove4_34 = ioio_.openDigitalInput(34, DigitalInput.Spec.Mode.PULL_UP);
   	    	grove5_1 = ioio_.openDigitalInput(1, DigitalInput.Spec.Mode.PULL_UP);
@@ -2341,8 +2346,8 @@ private void copyGIF64Source() {
   	    	
   			//button_ = ioio_.openDigitalInput(4);
 			//input_ = ioio_.openAnalogInput(33);
-			//ProxInput_ = ioio_.openAnalogInput(32);
-			//AlcoholInput_ = ioio_.openAnalogInput(35);
+			ProxInput_ = ioio_.openAnalogInput(32);
+			AlcoholInput_ = ioio_.openAnalogInput(35);
   			
   			matrix_ = ioio_.openRgbLedMatrix(KIND);
   			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
@@ -2386,15 +2391,15 @@ private void copyGIF64Source() {
 
   		public void loop() throws ConnectionLostException, InterruptedException {
 			//setNumber(input_.read());
-			//setProx(ProxInput_.read());
-			//setAlcohol(AlcoholInput_.read());
+			setProx(ProxInput_.read());
+			setAlcohol(AlcoholInput_.read());
 			
   			grove1_6_ = grove1_6.read(); 
-			grove1_35_ = grove1_35.read(); 
+			//grove1_35_ = grove1_35.read(); 
 			grove2_4_ = grove2_4.read(); //IOIO pin 4
 			grove2_5_ = grove2_5.read(); 
 			grove3_31_ = grove3_31.read(); 
-			grove3_32_ = grove3_32.read(); 
+			//grove3_32_ = grove3_32.read(); 
 			grove4_33_ = grove4_33.read(); 
 			grove4_34_ = grove4_34.read(); 
 			grove5_1_ = grove5_1.read(); 
@@ -2403,8 +2408,8 @@ private void copyGIF64Source() {
 			if (grove1_6_ == true)  setGrove1_6Text(true, "1: IOIO 6 is High"); 
 			else setGrove1_6Text(false, "1: IOIO 6 is Low");
 			
-			if (grove1_35_ == true) setGrove1_35Text(true,"1: IOIO 35 is High");
-			else setGrove1_35Text(false,"1: IOIO 35 is Low");
+			/*if (grove1_35_ == true) setGrove1_35Text(true,"1: IOIO 35 is High");
+			else setGrove1_35Text(false,"1: IOIO 35 is Low");*/
 			
 			if (grove2_4_ == true) setGrove2_4Text(true,"2: IOIO 4 is High");
 			else setGrove2_4Text(false,"2: IOIO 4 is Low");
@@ -2415,8 +2420,8 @@ private void copyGIF64Source() {
 			if (grove3_31_ == true) setGrove3_31Text(true,"3: IOIO 31 is High");
 			else setGrove3_31Text(false,"3: IOIO 31 is Low");
 			
-			if (grove3_32_ == true) setGrove3_32Text(true,"3: IOIO 32 is High");
-			else setGrove3_32Text(false,"3: IOIO 32 is Low");
+			/*if (grove3_32_ == true) setGrove3_32Text(true,"3: IOIO 32 is High");
+			else setGrove3_32Text(false,"3: IOIO 32 is Low");*/
 			
 			if (grove4_33_ == true) setGrove4_33Text(true,"4: IOIO 33 is High");
 			else setGrove4_33Text(false,"4: IOIO 33 is Low");
@@ -2496,7 +2501,8 @@ private void copyGIF64Source() {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				ProxTextView_.setText(str);
+				//ProxTextView_.setText(str);
+				Grove3_32TextView.setText("3. Analog Input: " + str);
 			}
 		});
 	}
@@ -2506,7 +2512,8 @@ private void copyGIF64Source() {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				AlcoholTextView_.setText(str);
+				//AlcoholTextView_.setText(str);
+				Grove1_35TextView.setText("1. Analog Input: " + str);
 			}
 		});
 	}
@@ -2522,7 +2529,7 @@ private void copyGIF64Source() {
 		});
 	}
 	
-	private void setGrove1_35Text(final boolean inputPin , final String str) {
+	/*private void setGrove1_35Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -2531,7 +2538,7 @@ private void copyGIF64Source() {
 				else Grove1_35TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
-	}
+	}*/
 	
 	private void setGrove2_4Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
@@ -2566,7 +2573,7 @@ private void copyGIF64Source() {
 		});
 	}
 	
-	private void setGrove3_32Text(final boolean inputPin , final String str) {
+	/*private void setGrove3_32Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -2575,7 +2582,7 @@ private void copyGIF64Source() {
 				else Grove3_32TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
-	}
+	}*/
 	
 	private void setGrove4_33Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
