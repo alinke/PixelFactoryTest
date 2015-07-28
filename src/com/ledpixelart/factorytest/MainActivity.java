@@ -27,8 +27,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -48,6 +46,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -263,12 +262,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private TextView ProxTextView_;
 	private TextView AlcoholTextView_;
 	private TextView i2cText_;
+	
 	private static ImageButton startButton_;
 	private static MainActivity instance = null;
 	private static int whiteTestDone = 0;
-	private RadioGroup pixelRadioGroup_ = null;
+	/*private RadioGroup pixelRadioGroup_ = null;
 	private static RadioButton pixelRadio_;
 	private static RadioButton superPixelRadio_;
+	private static RadioButton  pixelRadio25_;
+	private static RadioButton superPixelRadio25_ ;*/
 	
 	private TextView Grove1_6TextView;
 	private TextView Grove1_35TextView;
@@ -280,6 +282,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 	private TextView Grove4_34TextView;
 	private TextView Grove5_1TextView;
 	private TextView Grove5_2TextView;
+	private TextView pixelModelTextView;
 	
 	private MediaPlayer beginTestSound;
 	private MediaPlayer checkWhiteLEDsSound;
@@ -332,6 +335,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			Grove4_34TextView = (TextView) findViewById(R.id.Grove4_34);
 			Grove5_1TextView = (TextView) findViewById(R.id.Grove5_1);
 			Grove5_2TextView = (TextView) findViewById(R.id.Grove5_2);
+			pixelModelTextView =  (TextView) findViewById(R.id.pixelModel);
 			
 			Grove1_35TextView.setTextColor(getResources().getColor(R.color.green)); //the analog pins get a different color
 			Grove3_32TextView.setTextColor(getResources().getColor(R.color.green)); //the analog pins get a differnet color
@@ -362,31 +366,85 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
             Log.v(tag, e.getMessage());
         }
         
-     
-        
-        pixelRadioGroup_ = (RadioGroup) findViewById(R.id.pixelRadioGroup);
+      /*  pixelRadioGroup_ = (RadioGroup) findViewById(R.id.pixelRadioGroup);
         pixelRadio_ = (RadioButton) findViewById(R.id.pixelRadio);
         superPixelRadio_ = (RadioButton) findViewById(R.id.superPixelRadio);
+        pixelRadio25_ = (RadioButton) findViewById(R.id.pixelRadio25);
+        superPixelRadio25_ = (RadioButton) findViewById(R.id.superPixelRadio25);
         
         pixelRadio_.setEnabled(false);
         superPixelRadio_.setEnabled(false);
+        pixelRadio25_.setEnabled(false);
+        superPixelRadio25_.setEnabled(false);*/
         
         matrixChangedListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 			  public void onSharedPreferenceChanged(SharedPreferences prefs, String selected_matrix) {
-			  // showToast("matrix model:" + matrix_model);
-			   setPreferences();  
-			    if (matrix_model == 3) {
-			    	 pixelRadio_.setChecked(true);
-			    	 superPixelRadio_.setChecked(false);
+			   setPreferences(); 
+			   
+			   if (matrix_model == 3) {
+			    	/* pixelRadio_.setChecked(true);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(false);*/
+				     pixelModelTextView.setText("PIXEL V2 32x32");
 			    }
-			    else { //it's super pixel
-			    	pixelRadio_.setChecked(false);
-			    	superPixelRadio_.setChecked(true);
+			    else if (matrix_model == 10) { //it's super pixel
+			    	/* pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(true);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(false);*/
+			    	 pixelModelTextView.setText("PIXEL V2 SUPER PIXEL 64x64");
 			    }
+			    else if (matrix_model == 11) {
+			    	/* pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(true);
+			         superPixelRadio25_.setChecked(false);*/
+			    	 pixelModelTextView.setText("PIXEL V2.5 Maker's Kit 32x32");
+			    }
+			    else if (matrix_model == 14) {
+			    	 /*pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(true);*/
+			    	 pixelModelTextView.setText("PIXEL V2.5 SUPER PIXEL 64x64");
+			    }
+			    else {
+			    	
+			    }
+			   
+			 /*   if (matrix_model == 3) {
+			    	 pixelRadio_.setEnabled(true);
+			         superPixelRadio_.setEnabled(false);
+			         pixelRadio25_.setEnabled(false);
+			         superPixelRadio25_.setEnabled(false);
+			    }
+			    else if (matrix_model == 10) { //it's super pixel
+			    	 pixelRadio_.setEnabled(false);
+			         superPixelRadio_.setEnabled(true);
+			         pixelRadio25_.setEnabled(false);
+			         superPixelRadio25_.setEnabled(false);
+			    }
+			    else if (matrix_model == 11) {
+			    	 pixelRadio_.setEnabled(false);
+			         superPixelRadio_.setEnabled(false);
+			         pixelRadio25_.setEnabled(true);
+			         superPixelRadio25_.setEnabled(false);
+			    }
+			    else if (matrix_model == 14) {
+			    	 pixelRadio_.setEnabled(false);
+			         superPixelRadio_.setEnabled(false);
+			         pixelRadio25_.setEnabled(false);
+			         superPixelRadio25_.setEnabled(true);
+			    }
+			    else {
+			    	
+			    }*/
 			    
-			   showToast(getString(R.string.LEDMatrixChanged));
+			   // made a code change where don't need to restart anymore 
+			   /*showToast(getString(R.string.LEDMatrixChanged));
 			   restartApp.start(); //play the sound
-			   startButton_.setVisibility(View.INVISIBLE);
+			   startButton_.setVisibility(View.INVISIBLE);*/
 			    
 			  }
 		};
@@ -875,7 +933,7 @@ private void copyGIF64Source() {
 			showToast(getString(R.string.RunningWhiteTest));
 	     	animateAfterDecode(0);*/
 	     	
-	     	if (matrix_model == 10) { //we have super pixel 64x64
+	     	if (matrix_model == 10 || matrix_model == 14) { //we have super pixel 64x64
 	     		
 	     		imagePath = GIF64Path + whiteTestFileName64 + ".gif";
 	     		selectedFileName = whiteTestFileName64;
@@ -1000,7 +1058,7 @@ private void copyGIF64Source() {
     	  @Override
     	  protected Void doInBackground(Void... params) {
 		  
-		  if (matrix_model == 10 && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
+		  if ((matrix_model == 10 || matrix_model == 14) && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
 	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
@@ -1670,7 +1728,7 @@ private void copyGIF64Source() {
 		   			}
 					
 					 switch (selectedFileResolution) { //16x32 matrix = 1024k frame size, 32x32 matrix = 2048k frame size
-			            case 16: frame_length = 1048;
+			            case 16: frame_length = 1024;
 			                     break;
 			            case 32: frame_length = 2048;
 			                     break;
@@ -1951,31 +2009,6 @@ private void copyGIF64Source() {
 		        
 		       }
 	    	
-
-	    /*	if (item.getItemId() == R.id.menu_pixelJoint)
-		       {
-	    			String downloadURL = "www.pixeljoint.com/pixels/new_icons.asp?search=&dimo=%3D&dim=32&colorso=%3E%3D&colors=2&tran=&anim=&iso=&av=&owner=&d=&dosearch=1&ob=search&action=search";
-	    			
-	    			if (matrix_model == 10) { //if 64x64
-	    				downloadURL = downloadURL_64;
-	    			}
-	    			else {
-	    				downloadURL = downloadURL_32;
-	    			}
-	    			
-			    	Intent i = new Intent(Intent.ACTION_VIEW);
-			    	i.setData(Uri.parse("http://" + downloadURL));
-			    	startActivity(i);
-		       }*/
-	    	
-	    	/*if (item.getItemId() == R.id.menu_camera)
-		       {
-	    		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-	    	     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-	    	    }
-		       }*/
-	    	
 	       return true;
 	    }
 	    
@@ -1994,108 +2027,18 @@ private void copyGIF64Source() {
 	    		//showToast("returned from preferences");
 	    	}	
 	    	
-	    	/*if (reqCode == REQUEST_IMAGE_CAPTURE && resCode == RESULT_OK) {  //we'll get the picture and write is to the userpng sd card directory and then load into the gridview like any other png or gif
-	            Bundle extras = data.getExtras();
-	            cameraBMP = (Bitmap) extras.get("data");
-	            
-	            //let's make sure our directory is there fist and create it if not
-	           File outPath = new File(userPNGPath);
-    		   if (!outPath.exists()) {  //create the dir if it does not exist
-				  outPath.mkdirs();
-			   }
-	            
-	            //let's save this bitmap to the sd card and then load it also
-	        
-	           OutputStream stream = null;
-	           File newCamerafile = new File(userPNGPath + "camerapic.png");
-	           String newCamerafileString = null;
-	   		   
-				if (newCamerafile.exists() && saveMultipleCameraPics_ == true) {  //if the file is already there AND we should save multiple camera images, then we need to create a unique name
-	   				  String uuid = UUID.randomUUID().toString();
-	   				  try {
-						stream = new FileOutputStream(userPNGPath  + uuid + ".png");
-						newCamerafileString = userPNGPath  + uuid + ".png";
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-	   			  }
-	   			  else {
-	   				try {
-						stream = new FileOutputStream(userPNGPath + "camerapic.png");
-						newCamerafileString = userPNGPath + "camerapic.png";
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-	   			  }
-				
-	             Write bitmap to file using JPEG or PNG and 100% quality hint for JPEG. 
-	            cameraBMP.compress(CompressFormat.PNG, 100, stream);
-	            try {
-					stream.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
- 			 
- 			  //we've copied in the new file so now we need to add it to the gridview
- 			  myImageAdapter.add(newCamerafileString);
- 			  //now let's re-load
- 			  continueOnCreate();
-	        }*/
+	    	
 	    } 
 	    
 	    private void setPreferences() //here is where we read the shared preferences into variables
 	    {
-	     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);     
-	    
-	     //scanAllPics = prefs.getBoolean("pref_scanAll", false);
-	     //slideShowMode = prefs.getBoolean("pref_slideshowMode", false);
-	     //noSleep = prefs.getBoolean("pref_noSleep", false);
+	     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);  
+	     
 	     debug_ = prefs.getBoolean("pref_debugMode", false);
-	     //kioskMode_ = prefs.getBoolean("pref_kioskMode", false);
-	     //gifonly_ = prefs.getBoolean("pref_gifonly", false); //only load gifs, don't load static pngs if true
-	    // only64_ = prefs.getBoolean("pref_only64", false); //only show 64x64 content
-	   //  showStartupMsg_ = prefs.getBoolean("pref_showStartupMsg", true); //show the "long tap to write to pixel message
-	     //saveMultipleCameraPics_ = prefs.getBoolean("pref_writeCamera", false);
 	   
 	    matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
 	    	        resources.getString(R.string.matrix_default_value))); 
-	     
-	   /*  downloadURL_32 = prefs.getString(   //the selected RGB LED Matrix Type
-	    	        resources.getString(R.string.downloadURL_32),
-	    	        resources.getString(R.string.downloadURL_32Default)); 
-	     
-	     downloadURL_64 = prefs.getString(   //the selected RGB LED Matrix Type
-	    	        resources.getString(R.string.downloadURL_64),
-	    	        resources.getString(R.string.downloadURL_64Default)); */
-	     
-	    /* <EditTextPreference
-		    android:title="@string/downloadURL_32"
-		    android:key="@string/pref_downloadURL_32"
-		    android:defaultValue="@string/downloadURL_32Default"
-		    android:summary="@string/downloadURL_32Summary"/>
-	    
-	    <EditTextPreference
-		    android:title="@string/downloadURL_64"
-		    android:key="@string/pref_downloadURL_64"
-		    android:defaultValue="@string/downloadURL_64Default"
-		    android:summary="@string/downloadURL_64Summary"/>*/
-	     
-	   /*  if (matrix_model == 0 || matrix_model == 1) {
-	    	 currentResolution = 16;
-	     }
-	     else
-	     {
-	    	 currentResolution = 32;
-	     }*/
-	     
-	   /*  FPSOverride_ = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
-	    	        resources.getString(R.string.fps_override),
-	    	        resources.getString(R.string.FPSOverrideDefault))); */
-	    //this wasn't adding any value so removed it
 	     
 	     FPSOverride_ = 0;
 	     
@@ -2121,10 +2064,268 @@ private void copyGIF64Source() {
 	     default:	    		 
 	    	 fps = 0;
 	     }
-	   
-	     //matrix_model = 3;
 	     
-	     switch (matrix_model) {  //get this from the preferences
+	     
+	     if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("0")) { // we will auto-select by default since this is the factory test program
+		    	
+	    	 	//let's first check if we have a matching firmware to auto-select and if not, we'll just go what the matrix from preferences
+		  
+		  		if (pixelHardwareID.substring(4,5).equals("Q")) {
+	    	 		matrix_model = 11;
+	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	frame_length = 2048;
+			    	currentResolution = 32; 
+			    	
+			    	pixelModelTextView.setText("PIXEL 2.5 Assembled 32x32 Autodetected");
+			    	
+			    	/* pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(true);
+			         superPixelRadio25_.setChecked(false);*/
+			         
+	    	 	}
+	    	 	else if (pixelHardwareID.substring(4,5).equals("T")) {
+	    	 		matrix_model = 14;
+	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
+			    	BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+			    	frame_length = 8192;
+			    	currentResolution = 128; 
+			    	
+			    	pixelModelTextView.setText("PIXEL 2.5 SUPER PIXEL 64x64 Autodetected");
+			    	
+			    /*	 pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(true);*/
+			         
+	    	 	}
+	    	 	else if (pixelHardwareID.substring(4,5).equals("I")) {
+	    	 		matrix_model = 1; 
+	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
+			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+			    	frame_length = 1024;
+			    	currentResolution = 16;
+			    	
+			    	pixelModelTextView.setText("C.A.T. LED Purse or iBling 32x16 Autodetected");
+	    	 	}
+	    	 
+	    	 	else if (pixelHardwareID.substring(4,5).equals("C")) {
+	    	 		matrix_model = 12; 
+	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
+			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	frame_length = 2048;
+			    	currentResolution = 32; 
+			    	
+			    	pixelModelTextView.setText("C.A.T. LED Purse or iBling 32x32");
+			    	
+	    	 	}
+	    	 	else if (pixelHardwareID.substring(4,5).equals("R")) {
+	    	 		matrix_model = 13; 
+	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
+			    	BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+			    	frame_length = 4096;
+			    	currentResolution = 64; 
+	    	 	}
+	    	 	else if (pixelHardwareID.substring(4,5).equals("M")) { 
+	    	 		 matrix_model = 3;
+	    	 		 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //pixel v2
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32;
+			    	 
+			    	 pixelModelTextView.setText("PIXEL V2 32x32 Autodetected");
+			    	 
+			    	/* pixelRadio_.setChecked(true);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(false);*/
+			         
+	    	 	}
+	    	 	else if (pixelHardwareID.substring(4,5).equals("N")) { 
+	    	 		 matrix_model = 11;
+	    	 		 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32; //pixel v2.5
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32; 
+			    	 
+			    	 pixelModelTextView.setText("PIXEL 2.5 Assembled 32x32 Autodetected");
+			    	 
+	    	 	}
+	    	 	else {  //in theory, we should never go here
+	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	frame_length = 2048;
+			    	currentResolution = 32; 
+			    	
+			    	/* pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(true);
+			         superPixelRadio25_.setChecked(false);*/
+			         
+			         pixelModelTextView.setText("PIXEL 2.5 Maker's Kit 32x32");
+	    	 	}
+	  		}	
+	  
+	       else {
+		     switch (matrix_model) {  //get this from the preferences
+			     case 0:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+			    	 frame_length = 1024;
+			    	 currentResolution = 16;
+			    	 break;
+			     case 1:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
+			    	 frame_length = 1024;
+			    	 currentResolution = 16;
+			    	 break;
+			     case 2:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1, this matrix was never used
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32;
+			    	 break;
+			     case 3:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32;
+			    	 
+			    	/* pixelRadio_.setChecked(true);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(false);*/
+			         
+			    	 break;
+			     case 4:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x32; 
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+			    	 frame_length = 8192;
+			    	 currentResolution = 64; 
+			    	 break;
+			     case 5:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x64; 
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
+			    	 frame_length = 8192;
+			    	 currentResolution = 64; 
+			    	 break;	 
+			     case 6:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_2_MIRRORED; 
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
+			    	 frame_length = 8192;
+			    	 currentResolution = 64; 
+			    	 break;	 	 
+			     case 7: //this one doesn't work and we don't use it rigth now
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_4_MIRRORED;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
+			    	 frame_length = 8192; //original 8192
+			    	 currentResolution = 128; //original 128
+			    	 break;
+			     case 8:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_128x32; //horizontal
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
+			    	 frame_length = 8192;
+			    	 currentResolution = 128;  
+			    	 break;	 
+			     case 9:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x128; //vertical mount
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
+			    	 frame_length = 8192;
+			    	 currentResolution = 128; 
+			    	 break;	 
+			     case 10:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x64;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+			    	 frame_length = 8192;
+			    	 currentResolution = 128; 
+			    	 
+			    	 pixelModelTextView.setText("PIXEL V2 SUPER PIXEL 64x64");
+			    	 
+			    	 /*pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(true);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(false);*/
+			         
+			    	 break;
+			     case 11:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32; 
+			    	 
+			    	 pixelModelTextView.setText("PIXEL V2.5 Maker's Kit 32x32");
+			    	 
+			    	/* pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(true);
+			         superPixelRadio25_.setChecked(false);*/
+			         
+			    	 break;	 
+			     case 12:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32; 
+			    	 break;	 	 
+			     case 13:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+			    	 frame_length = 4096;
+			    	 currentResolution = 64; 
+			    	 break;	
+			     case 14:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+			    	 frame_length = 8192;
+			    	 currentResolution = 128; 
+			    	 
+			    	 pixelModelTextView.setText("PIXEL V2.5 SUPER PIXEL 64x64");
+			    	 
+			    	/* pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(true);*/
+			         
+			    	 break;
+			     case 15:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_128x32;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
+			    	 frame_length = 8192;
+			    	 currentResolution = 128; 
+			    	 break;	 	 	
+			     case 16:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x128;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
+			    	 frame_length = 8192;
+			    	 currentResolution = 128; 
+			    	 break;	
+			     case 17:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x16;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage64by16);
+			    	 frame_length = 2048;
+			    	 currentResolution = 6416; 
+			    	 break;	 	 		 
+			     default:	    		 
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32;
+			    	 
+			    	 pixelModelTextView.setText("PIXEL V2.5 Maker's Kit 32x32");
+			     }
+	    	 }
+	         
+	   /*  frame_ = new short [KIND.width * KIND.height];
+		 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
+		 
+		 loadRGB565(); //load the select pic raw565 file
+*/	     
+	     
+	     
+	     
+	   /*  switch (matrix_model) {  //get this from the preferences
 	     case 0:
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
@@ -2148,8 +2349,11 @@ private void copyGIF64Source() {
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 	    	 frame_length = 2048;
 	    	 currentResolution = 32;
+	    	 
 	    	 pixelRadio_.setChecked(true);
-	    	// superPixelRadio_.setChecked(false);
+	         superPixelRadio_.setChecked(false);
+	         pixelRadio25_.setChecked(false);
+	         superPixelRadio25_.setChecked(false);
 	    	 break;
 	     case 4:
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x32; 
@@ -2190,16 +2394,59 @@ private void copyGIF64Source() {
 	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x64;
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
 	    	 frame_length = 8192;
-	    	 currentResolution = 128; 
-	    	 //pixelRadio_.setChecked(false);
-	    	 superPixelRadio_.setChecked(true);
+	    	 currentResolution = 128;
+	    	 
+	    	 pixelRadio_.setChecked(false);
+	         superPixelRadio_.setChecked(true);
+	         pixelRadio25_.setChecked(false);
+	         superPixelRadio25_.setChecked(false);
 	    	 break;	 	 		 
+	     case 11:
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+	    	 frame_length = 2048;
+	    	 currentResolution = 32;  
+	    	 
+	    	 pixelRadio_.setChecked(false);
+	         superPixelRadio_.setChecked(false);
+	         pixelRadio25_.setChecked(true);
+	         superPixelRadio25_.setChecked(false);
+	    	 break;	 
+	     case 12:
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
+	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+	    	 frame_length = 2048;
+	    	 currentResolution = 32; 
+	    	 break;	 	 
+	     case 13:
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
+	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+	    	 frame_length = 4096;
+	    	 currentResolution = 64; 
+	    	 break;	
+	     case 14:
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
+	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+	    	 frame_length = 8192;
+	    	 currentResolution = 128; 
+	    	 
+	    	 pixelRadio_.setChecked(false);
+	         superPixelRadio_.setChecked(false);
+	         pixelRadio25_.setChecked(false);
+	         superPixelRadio25_.setChecked(true);
+	    	 break;	 
 	     default:	    		 
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
+	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32; //v2 as the default
 	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
 	    	 frame_length = 2048;
 	    	 currentResolution = 32;
-	     }
+	     }*/
+	     
+	     
+	    /* pixelRadio_.setEnabled(false);
+         superPixelRadio_.setEnabled(false);
+         pixelRadio25_.setEnabled(false);
+         superPixelRadio25_.setEnabled(false);*/
 	     
 	     matrix_number = matrix_model;
 	         
@@ -2209,6 +2456,19 @@ private void copyGIF64Source() {
 		 loadRGB565(); //load the select pic raw565 file
 		 
 	 }
+	    
+    protected void onResume() {
+         super.onResume();
+         
+         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+         updatePrefs();
+     }
+    
+    private void updatePrefs() //here is where we read the shared preferences into variables
+    {
+    	 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);     
+    	 setPreferences();
+ }
 	    
     public static MainActivity getInstance() {
         return instance;
@@ -2223,7 +2483,7 @@ private void copyGIF64Source() {
     	
 		 sdIOTest.start();
     	
-    	if (matrix_model == 10) { //we have super pixel
+    	if (matrix_model == 10 || matrix_model == 14) { //we have super pixel
      		
      		imagePath = GIF64Path + writeDemoFileName64 + ".gif";
      		selectedFileName = writeDemoFileName64;
@@ -2349,7 +2609,7 @@ private void copyGIF64Source() {
 			ProxInput_ = ioio_.openAnalogInput(32);
 			AlcoholInput_ = ioio_.openAnalogInput(35);
   			
-  			matrix_ = ioio_.openRgbLedMatrix(KIND);
+  			//matrix_ = ioio_.openRgbLedMatrix(KIND);
   			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
   			connectTimer.cancel(); //we can stop this since it was found
   	
@@ -2361,6 +2621,30 @@ private void copyGIF64Source() {
   			IOIOLibVersion = ioio_.getImplVersion(v.IOIOLIB_VER);
   			//**********************************************************
   		
+  			 if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("0")) { //only go here if we have a firmware that is set to auto-detect, otherwise we can skip this
+ 	  			runOnUiThread(new Runnable() 
+ 	  			{
+ 	  			   public void run() 
+ 	  			   {
+ 	  				   updatePrefs();
+ 	  				   
+ 	  				   try {
+ 	  					 matrix_ = ioio_.openRgbLedMatrix(KIND);
+ 	 	  	  		     matrix_.frame(frame_); //stream "select image" text to PIXEL
+ 					} catch (ConnectionLostException e) {
+ 						// TODO Auto-generated catch block
+ 						e.printStackTrace();
+ 					}
+ 	  			      
+ 	  			   }
+ 	  			}); 
+   			}
+   		   
+   		   else { //we didn't auto-detect so just go the normal way
+   			  matrix_ = ioio_.openRgbLedMatrix(KIND);
+   	  		  matrix_.frame(frame_); //stream "select image" text to PIXEL
+   		   }
+  			
   			if (debug_ == true) {  			
   			   showToast(pixelHardwareID);
   			}
@@ -2370,12 +2654,13 @@ private void copyGIF64Source() {
   			}
   			
   		
-  			matrix_.frame(frame_); //this used to show select pic but we don't need now
+  			//matrix_.frame(frame_); //this used to show select pic but we don't need now
   				
   			
   			appAlreadyStarted = 1;
   			
-  			if (kioskMode_ == false && pixelHardwareID.substring(0,4).equals("PIXL")) { //if it's a PIXEL V2 unit
+  			//disabled the firmware check for now
+  			/*if (kioskMode_ == false && pixelHardwareID.substring(0,4).equals("PIXL")) { //if it's a PIXEL V2 unit
   	        	 //showToast(getString(R.string.StartupMessage) + " " + pixelFirmware.substring(4,8)); //PIXL006B or PIXL0008
   	        	 if (CurrentFirmwareVersion.equals(pixelFirmware)) {
   	        		showToast(pixelFirmware + " " + getString(R.string.correctFirmwareMsg)); //PIXL0008 is the correct firmware version
@@ -2385,14 +2670,17 @@ private void copyGIF64Source() {
   	        		 alertSound.start();
   	        		 showToast(pixelFirmware + " " + getString(R.string.incorrectFirmwareMsg) + " " + CurrentFirmwareVersion); //PIXL0008 is NOT the latest firmware version, please upgrade to
   	        	 }
-  	        	
-  	        }
+  	        }*/
+  			
   		}
 
   		public void loop() throws ConnectionLostException, InterruptedException {
 			//setNumber(input_.read());
-			setProx(ProxInput_.read());
-			setAlcohol(AlcoholInput_.read());
+			/*setProx(ProxInput_.read());
+			setAlcohol(AlcoholInput_.read());  in.getVoltage();*/
+  			
+  			setProx(ProxInput_.getVoltage());
+  			setAlcohol(AlcoholInput_.getVoltage());
 			
   			grove1_6_ = grove1_6.read(); 
 			//grove1_35_ = grove1_35.read(); 
@@ -2502,7 +2790,7 @@ private void copyGIF64Source() {
 			@Override
 			public void run() {
 				//ProxTextView_.setText(str);
-				Grove3_32TextView.setText("3. Analog Input: " + str);
+				Grove3_32TextView.setText("3. Analog Input: " + str + "V");
 			}
 		});
 	}
@@ -2513,7 +2801,7 @@ private void copyGIF64Source() {
 			@Override
 			public void run() {
 				//AlcoholTextView_.setText(str);
-				Grove1_35TextView.setText("1. Analog Input: " + str);
+				Grove1_35TextView.setText("1. Analog Input: " + str + "V");
 			}
 		});
 	}
@@ -2720,7 +3008,7 @@ private void copyGIF64Source() {
 	   			}
 				
 				 switch (selectedFileResolution) {
-		            case 16: frame_length = 1048;
+		            case 16: frame_length = 1024;
 		                     break;
 		            case 32: frame_length = 2048;
 		                     break;

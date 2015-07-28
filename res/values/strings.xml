@@ -94,8 +94,6 @@
     <string name="downloadURL_64Default">www.pixeljoint.com/pixels/new_icons.asp?search=&amp;dimo=%3D&amp;dim=64&amp;colorso=%3E%3D&amp;colors=2&amp;tran=&amp;anim=&amp;iso=&amp;av=&amp;owner=&amp;d=&amp;dosearch=1&amp;ob=search&amp;action=search</string>    
     <string name="downloadURL_64Summary">URL for 64x64 pixel art, don\'t include http://</string>
     
-   
-    
     <string name="menu_rescan_title">Rescan</string>
     <string name="rescan_screen_verbage">Now scanning your SD card or internal memory for new animations or deletions, just a moment&#8230;</string>
     
@@ -110,8 +108,7 @@
     <string name="loadingImagesPlsWait">Loading animations, just a moment&#8230;</string>
     
     <string name="stopSlideShowMessage">You\'re still in slide show mode, swipe from right to left to end the slide show and then you can select a single image</string>
-    <string name="loadingImagesPlsWaitTitle">Please Wait</string>
-    <string name="loadingImagesPlsWait">Loading animations, just a moment&#8230;</string>
+   
     
     <string name="debugMode">Debug Mode</string>    
     <string name="pref_debugMode">pref_debugMode</string>
@@ -130,7 +127,7 @@
      <string name="StartupMessage">PIXEL Found Firmware</string>
      <string name="oneTimeSetup">One Time Setup</string>
      <string name="oneTimeSetupBody">Copying pixel art to your local memory....</string>
-     <string name="pixelNotFound">PIXEL was not found, did you Bluetooth pair?</string>
+     <string name="pixelNotFound">PIXEL was not found, did you Bluetooth pair? Use pin: 0000</string>
      <string name="bluetoothCode">Bluetooth Pair to PIXEL using code: 0000</string>
      <string name="replaceMatrix">Please replace LED matrix and run test again</string>
      
@@ -151,9 +148,9 @@
     
   <string name="selected_matrix">selected_matrix</string>
     <string name="matrix">PIXEL Type Selection</string>
-    <string name="matrixSummary">Select PIXEL 32x32 or SUPER PIXEL 64x64, you must re-start this app if you change</string>    
+    <string name="matrixSummary">Select PIXEL 32x32 or SUPER PIXEL 64x64</string>    
     <string name="dialogTitleMatrix">PIXEL Type Selection</string>
-    <string name="matrix_default_value">3</string>  
+    <string name="matrix_default_value">11</string>  
     
     
    

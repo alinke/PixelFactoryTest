@@ -70,21 +70,22 @@ public final class R {
         public static final int Grove4_34=0x7f0a000a;
         public static final int Grove5_1=0x7f0a000b;
         public static final int Grove5_2=0x7f0a000c;
-        public static final int firstTimeInstructions=0x7f0a0012;
-        public static final int firstTimeSetup1=0x7f0a0010;
-        public static final int firstTimeSetup2=0x7f0a0011;
-        public static final int firstTimeSetupCounter=0x7f0a0013;
+        public static final int firstTimeInstructions=0x7f0a0013;
+        public static final int firstTimeSetup1=0x7f0a0011;
+        public static final int firstTimeSetup2=0x7f0a0012;
+        public static final int firstTimeSetupCounter=0x7f0a0014;
         public static final int gifView=0x7f0a000d;
-        public static final int gridview=0x7f0a000f;
-        public static final int menu_about=0x7f0a0018;
-        public static final int menu_btPair=0x7f0a0016;
-        public static final int menu_instructions=0x7f0a0019;
-        public static final int menu_prefs=0x7f0a0017;
+        public static final int gridview=0x7f0a0010;
+        public static final int menu_about=0x7f0a0019;
+        public static final int menu_btPair=0x7f0a0017;
+        public static final int menu_instructions=0x7f0a001a;
+        public static final int menu_prefs=0x7f0a0018;
+        public static final int pixelModel=0x7f0a000e;
         public static final int pixelRadio=0x7f0a0001;
         public static final int pixelRadioGroup=0x7f0a0000;
-        public static final int reload=0x7f0a0015;
-        public static final int sdcard=0x7f0a0014;
-        public static final int startButton=0x7f0a000e;
+        public static final int reload=0x7f0a0016;
+        public static final int sdcard=0x7f0a0015;
+        public static final int startButton=0x7f0a000f;
         public static final int superPixelRadio=0x7f0a0002;
     }
     public static final class layout {
@@ -127,10 +128,11 @@ public final class R {
         public static final int selectimage16=0x7f05001b;
         public static final int selectimage32=0x7f05001c;
         public static final int selectimage64=0x7f05001d;
-        public static final int selectpic=0x7f05001e;
-        public static final int selectpic32=0x7f05001f;
-        public static final int testing_complete_chinese=0x7f050020;
-        public static final int testing_complete_english=0x7f050021;
+        public static final int selectimage64by16=0x7f05001e;
+        public static final int selectpic=0x7f05001f;
+        public static final int selectpic32=0x7f050020;
+        public static final int testing_complete_chinese=0x7f050021;
+        public static final int testing_complete_english=0x7f050022;
     }
     public static final class string {
         public static final int BootloaderVersionString=0x7f080004;
