@@ -133,6 +133,7 @@
      
     
      <string name="factoryTestComplete">Power PIXEL off and on. If the default animation is still running, testing is complete.</string>
+     <string name="factoryTestCompleteCATClutch">Power the CAT Clutch off and on. If the default animation is still running, testing is complete.</string>
      <string name="allLEDsWhite">Are all the LEDs white?</string>
      <string name="Yes">Yes</string>
      <string name="No">No</string>
@@ -147,11 +148,10 @@
     <string name="LEDMatrixChanged">Please close and restart this app now for the new PIXEL model to work correctly</string>
     
   <string name="selected_matrix">selected_matrix</string>
-    <string name="matrix">PIXEL Type Selection</string>
-    <string name="matrixSummary">Select PIXEL 32x32 or SUPER PIXEL 64x64</string>    
-    <string name="dialogTitleMatrix">PIXEL Type Selection</string>
-    <string name="matrix_default_value">11</string>  
-    
+    <string name="matrix">LED Panel Type Selection</string>
+    <string name="matrixSummary">Select PIXEL 32x32 or SUPER PIXEL 64x64 or CAT Clutch</string>    
+    <string name="dialogTitleMatrix">LED Panel Type Selection</string>
+    <string name="matrix_default_value">11</string> 
     
    
     

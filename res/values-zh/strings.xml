@@ -135,6 +135,7 @@
      <string name="replaceMatrix">请更换LED矩阵，并再次运行测试</string>
    
      <string name="factoryTestComplete">关闭并再打开电源。如果默认的动画仍然在运行，测试完成。</string>
+     <string name="factoryTestCompleteCATClutch">电源CAT离合器和关闭。如果默认的动画仍在运行，测试完成。</string>
      <string name="allLEDsWhite">是否所有的LED显示白色？</string>
      <string name="Yes">是的</string>
      <string name="No">不是</string>

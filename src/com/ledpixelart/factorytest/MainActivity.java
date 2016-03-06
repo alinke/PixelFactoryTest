@@ -149,7 +149,8 @@ import java.util.UUID;
 //to do , think about deleting the decoded directory if led panel size changed
 
 @SuppressLint({ "ParserError", "ParserError" })
-public class MainActivity extends IOIOActivity implements OnItemClickListener, OnItemLongClickListener  {
+//public class MainActivity extends IOIOActivity implements OnItemClickListener, OnItemLongClickListener  {
+public class MainActivity extends IOIOActivity  {
 
 	private static GifView gifView;
 	private static ioio.lib.api.RgbLedMatrix matrix_;
@@ -192,11 +193,16 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     
     private static String GIFPath =  Environment.getExternalStorageDirectory() + "/pixel/factorytestgif/"; //put the pngs (for display purposes) and the gifs together in this same dir, code should take the png if it exists, otherwise take the gif
     private static String GIF64Path =  Environment.getExternalStorageDirectory() + "/pixel/factorytestgif64/";  //gifs 64x64, there will be a decoded directory here
+    private static String GIF16Path =  Environment.getExternalStorageDirectory() + "/pixel/factorytestgif16/";  //gifs 32x16, there will be a decoded directory here
     
     private static String whiteTestFileName = "whitetest";
     private static String whiteTestFileName64 = "whitetest64";
+    private static String whiteTestFileName16 = "whitetest16";
+    
     private static String writeDemoFileName = "writedemo";
     private static String writeDemoFileName64 = "writedemo64";
+    private static String writeDemoFileName16 = "writedemo16";
+    
     private static Context context;
     private Context frameContext;
     private GridView sdcardImages;
@@ -243,7 +249,7 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
     private RandomAccessFile raf = null;
 	private File file;
 	private int readytoWrite = 0;
-	private static int matrix_number;
+	//private static int matrix_number;
 	private  AsyncTaskLoadFiles myAsyncTaskLoadFiles;
 	private ImageAdapter2 myImageAdapter;
 	private GridView gridview;
@@ -336,7 +342,6 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			Grove5_1TextView = (TextView) findViewById(R.id.Grove5_1);
 			Grove5_2TextView = (TextView) findViewById(R.id.Grove5_2);
 			pixelModelTextView =  (TextView) findViewById(R.id.pixelModel);
-			
 			Grove1_35TextView.setTextColor(getResources().getColor(R.color.green)); //the analog pins get a different color
 			Grove3_32TextView.setTextColor(getResources().getColor(R.color.green)); //the analog pins get a differnet color
 		
@@ -395,6 +400,15 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			         superPixelRadio25_.setChecked(false);*/
 			    	 pixelModelTextView.setText("PIXEL V2 SUPER PIXEL 64x64");
 			    }
+			   
+			    else if (matrix_model == 1) { //it's super pixel
+			    	/* pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(true);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(false);*/
+			    	 pixelModelTextView.setText("CAT Clutch 32x16");
+			    }
+			   
 			    else if (matrix_model == 11) {
 			    	/* pixelRadio_.setChecked(false);
 			         superPixelRadio_.setChecked(false);
@@ -626,6 +640,21 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 		  	if (!GIF64decodeddir.exists()) {
 		  		GIF64decodeddir.mkdirs();
 		  	}
+		  	
+		  	File GIF16dir = new File(GIF16Path);
+		  	if (!GIF16dir.exists()) {
+		  		GIF16dir.mkdirs();
+		  	}
+			
+			File gif16Sourcedir = new File(GIF16Path + "gifsource");
+			if (!gif16Sourcedir.exists()) {
+				gif16Sourcedir.mkdirs();
+		  	}
+			
+			File GIF16decodeddir = new File(GIF16Path + "decoded");
+		  	if (!GIF16decodeddir.exists()) {
+		  		GIF16decodeddir.mkdirs();
+		  	}
 			
 		  	copyArt(); //copy the .png and .gif files (mainly png) because we want to decode first
 		  	copyGIFDecoded();  //copy the decoded files
@@ -633,6 +662,11 @@ public class MainActivity extends IOIOActivity implements OnItemClickListener, O
 			copyGIFSource();
 			copyGIF64Source();
 			copyGIF64Decoded();
+			
+			
+			copyGIF16();
+			copyGIF16Source();
+			copyGIF16Decoded();
 			
 	   return null;
 	  }
@@ -871,6 +905,112 @@ private void copyGIF64Source() {
 	           }       
 	       }
 	   } //end copyGIF64
+   
+   
+   private void copyGIF16Source() {
+   	
+   	AssetManager assetManager = getResources().getAssets();
+       String[] files = null;
+       try {
+           files = assetManager.list("factorytestgif16/gifsource");
+       } catch (Exception e) {
+           Log.e("read clipart ERROR", e.toString());
+           e.printStackTrace();
+       }
+       for(int i=0; i<files.length; i++) {
+       	progress_status ++;
+	  		publishProgress(progress_status);  
+           InputStream in = null;
+           OutputStream out = null;
+           try {
+            in = assetManager.open("factorytestgif16/gifsource/" + files[i]);
+            out = new FileOutputStream(GIF16Path + "gifsource/" + files[i]);
+             copyFile(in, out);
+             in.close();
+             in = null;
+             out.flush();
+             out.close();
+             out = null;
+          
+           } catch(Exception e) {
+               Log.e("copy clipart ERROR", e.toString());
+               e.printStackTrace();
+           }       
+       }
+   } //end copy gifsource
+	
+private void copyGIF16Decoded() {
+   	
+   	AssetManager assetManager = getResources().getAssets();
+       String[] files = null;
+       try {
+           files = assetManager.list("factorytestgif16/decoded");
+           //files2 = assetManager.list(GIFname + "/decoded");
+       } catch (Exception e) {
+           Log.e("read clipart ERROR", e.toString());
+           e.printStackTrace();
+       }
+       for(int i=0; i<files.length; i++) {
+       	progress_status ++;
+	  		publishProgress(progress_status);  
+           InputStream in = null;
+           OutputStream out = null;
+           try {
+            in = assetManager.open("factorytestgif16/decoded/" + files[i]);
+            out = new FileOutputStream(GIF16Path + "decoded/" + files[i]);
+             copyFile(in, out);
+             in.close();
+             in = null;
+             out.flush();
+             out.close();
+             out = null;  
+             
+             //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+          
+           } catch(Exception e) {
+               Log.e("copy clipart ERROR", e.toString());
+               e.printStackTrace();
+           }       
+       }
+   } //end copy gif decoded
+	
+
+private void copyGIF16() {
+  	
+  	AssetManager assetManager = getResources().getAssets();
+      String[] files = null;
+      try {
+          files = assetManager.list("factorytestgif16");
+      } catch (Exception e) {
+          Log.e("read clipart ERROR", e.toString());
+          e.printStackTrace();
+      }
+      for(int i=0; i<files.length; i++) {
+      	progress_status ++;
+	  		publishProgress(progress_status);  
+          InputStream in = null;
+          OutputStream out = null;
+          try {
+           in = assetManager.open("factorytestgif16/" + files[i]);
+           out = new FileOutputStream(GIF16Path + files[i]); 
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;  
+            
+            //no need to register these with mediascanner as these are internal gifs , the workaround for the gifs with a black frame as the first frame
+         
+          } catch(Exception e) {
+              Log.e("copy clipart ERROR", e.toString());
+              e.printStackTrace();
+          }       
+      }
+  } //end copyGIF16
+   
+   
+   
 		
 } //end async task
 	    
@@ -934,10 +1074,14 @@ private void copyGIF64Source() {
 	     	animateAfterDecode(0);*/
 	     	
 	     	if (matrix_model == 10 || matrix_model == 14) { //we have super pixel 64x64
-	     		
 	     		imagePath = GIF64Path + whiteTestFileName64 + ".gif";
 	     		selectedFileName = whiteTestFileName64;
 	     		decodedDirPath = GIF64Path + "decoded";
+	     	}
+	     	else if (matrix_model == 1) {
+	     		imagePath = GIF16Path + whiteTestFileName16 + ".gif";
+	     		selectedFileName = whiteTestFileName16;
+	     		decodedDirPath = GIF16Path + "decoded";
 	     	}
 	     	else {
 	     		imagePath = GIFPath + whiteTestFileName + ".gif";
@@ -1031,6 +1175,7 @@ private void copyGIF64Source() {
     	  File UserPNGtargetDirector;
     	  File UserGIFtargetDirector;
     	  File GIF64targetDirector;
+    	  File GIF16targetDirector;
     	  ImageAdapter2 myTaskAdapter;
 
     	  public AsyncTaskLoadFiles(ImageAdapter2 adapter) {
@@ -1050,6 +1195,9 @@ private void copyGIF64Source() {
     	   String GIF64targetPath = GIF64Path;
     	   GIF64targetDirector = new File(GIF64targetPath);
     	   
+    	   String GIF16targetPath = GIF16Path;
+    	   GIF16targetDirector = new File(GIF16targetPath);
+    	   
     	   myTaskAdapter.clear(); //TO DO add this to the sharing piece?
     	   
     	   super.onPreExecute();
@@ -1060,6 +1208,19 @@ private void copyGIF64Source() {
 		  
 		  if ((matrix_model == 10 || matrix_model == 14) && GIF64targetDirector.exists()) { //gif 64x64 content, only show if 64x64 led matrix is picked
 	    	   File[] files = GIF64targetDirector.listFiles(new FilenameFilter() {
+	   		    public boolean accept(File dir, String name) {
+	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
+	   		    }
+	   			});
+	   	   
+		   	   for (File file : files) {
+		   	    publishProgress(file.getAbsolutePath());
+		   	    if (isCancelled()) break;
+		   	   }
+		   }
+		  
+		  if ((matrix_model == 1) && GIF16targetDirector.exists()) { //gif 32x16 content
+	    	   File[] files = GIF16targetDirector.listFiles(new FilenameFilter() {
 	   		    public boolean accept(File dir, String name) {
 	   		        return name.toLowerCase().endsWith(".gif") || name.toLowerCase().endsWith(".png");
 	   		    }
@@ -1103,7 +1264,7 @@ private void copyGIF64Source() {
 
     	 }
 
-	@Override
+/*	@Override
  public  boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {  
 		if (deviceFound == 1) { 
 	  		//********we need to reset everything because the user could have been already running an animation
@@ -1144,10 +1305,10 @@ private void copyGIF64Source() {
 	        	decodedDirPath = GIFPath + "decoded";
 	        	gifPath_ = GIFPath;
 	        }
-	       /* else if (fileType.equals("usergif")) {
+	        else if (fileType.equals("usergif")) {
 	        	decodedDirPath = userGIFPath + "decoded";
 	        	gifPath_ = userGIFPath;
-	        }*/
+	        }
 	        else if (fileType.equals("gif64")) {
 	        	decodedDirPath = GIF64Path + "decoded";
 	        	gifPath_ = GIF64Path;
@@ -1237,9 +1398,9 @@ private void copyGIF64Source() {
     	showToast(getString(R.string.pixelNotFound));
     	return true;
     }
-}
+}*/
     
-  public void onItemClick(AdapterView<?> parent, View v, int position, long id) {    //we go here when the user tapped an image from the initial grid    
+  /*public void onItemClick(AdapterView<?> parent, View v, int position, long id) {    //we go here when the user tapped an image from the initial grid    
         
 	     
 	        if (deviceFound == 1) { 
@@ -1281,10 +1442,10 @@ private void copyGIF64Source() {
 			        	decodedDirPath = GIFPath + "decoded";
 			        	gifPath_ = GIFPath;
 			        }
-			     /*   else if (fileType.equals("usergif")) {
-			        	decodedDirPath = userGIFPath + "decoded";
-			        	gifPath_ = userGIFPath;
-			        }*/
+			        else if (fileType.equals("gif16")) {
+			        	decodedDirPath = GIF16Path + "decoded";
+			        	gifPath_ = GIF16Path;
+			        }
 			        else if (fileType.equals("gif64")) {
 			        	decodedDirPath = GIF64Path + "decoded";
 			        	gifPath_ = GIF64Path;
@@ -1356,7 +1517,7 @@ private void copyGIF64Source() {
 	        else {
 	        	showToast(getString(R.string.pixelNotFound));
 	        }
-  		}
+  		}*/
   
   private void WriteImagetoMatrix() throws ConnectionLostException {  //here we'll take a PNG, BMP, or whatever and convert it to RGB565 via a canvas, also we'll re-size the image if necessary
   	
@@ -1557,8 +1718,12 @@ private void copyGIF64Source() {
 	    	//now we need to compare the current resoluiton with the encoded resolution
 	    	//if different, then we need to re-encode
 	    	
+	    	
+	    	
 	    	if (selectedFileResolution == currentResolution) {  //selected resoluton comes from the text file of the selected file and current comes from the selected led matrix type from preferences
 	    	
+	    		
+	    		
 			    	if (selectedFileDelay != 0) {  //then we're doing the FPS override which the user selected from settings
 			    		fps = 1000.f / selectedFileDelay;
 					} else { 
@@ -1575,6 +1740,9 @@ private void copyGIF64Source() {
 			    			//MainActivity.writePixelAsync loadApplication = myActivity.new writePixelAsync();
 			    			writePixelAsync loadApplication = myActivity.new writePixelAsync();
 			    			loadApplication.execute();
+			    			
+			    			
+			    			
 		    			}
 		    			else {
 		    				matrix_.interactive(); //put PIXEL back in interactive mode, can't forget to do that! or we'll just be playing local animations
@@ -1818,7 +1986,7 @@ private void copyGIF64Source() {
 						//downloadCounter++;
 					  if (readytoWrite == 1)  {
  					   		try {
-						   	 Log.v("PixelAnimations ","Starting-->"+ count + " " + String.valueOf(selectedFileTotalFrames-1));
+						   	 Log.v("PixelFactoryTest","Starting-->"+ count + " " + String.valueOf(selectedFileTotalFrames-1));
 						   		matrix_.frame(frame_);
 						   		progress_status++;
 							    publishProgress(progress_status);
@@ -1863,8 +2031,17 @@ private void copyGIF64Source() {
 	 // pixelRadio_.setEnabled(true);
      // superPixelRadio_.setEnabled(true);
 	  //showToast(getString(R.string.factoryTestComplete));
-	  Toast toast16 = Toast.makeText(context, context.getResources().getString(R.string.factoryTestComplete), Toast.LENGTH_LONG);
-	  toast16.show();
+	  
+	  if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("I")) {  //it's not a CAT Clutch, then turn on digital and analog inputs
+		  Toast toast16 = Toast.makeText(context, context.getResources().getString(R.string.factoryTestComplete), Toast.LENGTH_LONG);
+		  toast16.show();
+	  }
+	  else {  //let's hide the labels if it is a CAT Clutch IMPORTANT: Enabling analog/digital pins will crash since analog is disabled in the firmware
+		  Toast toast16 = Toast.makeText(context, context.getResources().getString(R.string.factoryTestCompleteCATClutch), Toast.LENGTH_LONG);
+		  toast16.show();
+	  }
+	  
+	 
 }
 	
 }
@@ -1889,7 +2066,7 @@ private void copyGIF64Source() {
 	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding32);
 	     }*/
 		
-		 switch (matrix_number) {  //get this from the preferences
+		 switch (matrix_model) {  //get this from the preferences , used to be matrix_number
 	     case 0:
 	    	 BitmapInputStream = context.getResources().openRawResource(R.raw.decoding16);
 	    	 break;
@@ -2036,7 +2213,7 @@ private void copyGIF64Source() {
 	     
 	     debug_ = prefs.getBoolean("pref_debugMode", false);
 	   
-	    matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
+	     matrix_model = Integer.valueOf(prefs.getString(   //the selected RGB LED Matrix Type
 	    	        resources.getString(R.string.selected_matrix),
 	    	        resources.getString(R.string.matrix_default_value))); 
 	     
@@ -2065,6 +2242,8 @@ private void copyGIF64Source() {
 	    	 fps = 0;
 	     }
 	     
+	     
+	    // pixelHardwareID = "PIXL0025";
 	     
 	     if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("0")) { // we will auto-select by default since this is the factory test program
 		    	
@@ -2107,7 +2286,7 @@ private void copyGIF64Source() {
 			    	frame_length = 1024;
 			    	currentResolution = 16;
 			    	
-			    	pixelModelTextView.setText("C.A.T. LED Purse or iBling 32x16 Autodetected");
+			    	pixelModelTextView.setText("CAT Clutch LED Handbag or iBling 32x16 Autodetected");
 	    	 	}
 	    	 
 	    	 	else if (pixelHardwareID.substring(4,5).equals("C")) {
@@ -2117,7 +2296,7 @@ private void copyGIF64Source() {
 			    	frame_length = 2048;
 			    	currentResolution = 32; 
 			    	
-			    	pixelModelTextView.setText("C.A.T. LED Purse or iBling 32x32");
+			    	pixelModelTextView.setText("CAT Clutch LED Handbag 32x32 or iBling 32x32");
 			    	
 	    	 	}
 	    	 	else if (pixelHardwareID.substring(4,5).equals("R")) {
@@ -2180,6 +2359,9 @@ private void copyGIF64Source() {
 			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
 			    	 frame_length = 1024;
 			    	 currentResolution = 16;
+			    	 
+			    	 pixelModelTextView.setText("CAT Clutch 32x16");
+			    	 
 			    	 break;
 			     case 2:
 			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1, this matrix was never used
@@ -2197,6 +2379,8 @@ private void copyGIF64Source() {
 			         superPixelRadio_.setChecked(false);
 			         pixelRadio25_.setChecked(false);
 			         superPixelRadio25_.setChecked(false);*/
+			    	 
+			    	 pixelModelTextView.setText("PIXEL V2");
 			         
 			    	 break;
 			     case 4:
@@ -2317,139 +2501,6 @@ private void copyGIF64Source() {
 			     }
 	    	 }
 	         
-	   /*  frame_ = new short [KIND.width * KIND.height];
-		 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
-		 
-		 loadRGB565(); //load the select pic raw565 file
-*/	     
-	     
-	     
-	     
-	   /*  switch (matrix_model) {  //get this from the preferences
-	     case 0:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x16;
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-	    	 frame_length = 1048;
-	    	 currentResolution = 16;
-	    	 break;
-	     case 1:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x16;
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage16);
-	    	 frame_length = 1048;
-	    	 currentResolution = 16;
-	    	 break;
-	     case 2:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_NEW; //v1
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-	    	 frame_length = 2048;
-	    	 currentResolution = 32;
-	    	 break;
-	     case 3:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //pixelv2
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-	    	 frame_length = 2048;
-	    	 currentResolution = 32;
-	    	 
-	    	 pixelRadio_.setChecked(true);
-	         superPixelRadio_.setChecked(false);
-	         pixelRadio25_.setChecked(false);
-	         superPixelRadio25_.setChecked(false);
-	    	 break;
-	     case 4:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x32; 
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
-	    	 frame_length = 8192;
-	    	 currentResolution = 64; 
-	    	 break;
-	     case 5:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x64; 
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
-	    	 frame_length = 8192;
-	    	 currentResolution = 64; 
-	    	 break;	 
-	     case 6:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_2_MIRRORED; 
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by64);
-	    	 frame_length = 8192;
-	    	 currentResolution = 64; 
-	    	 break;	 	 
-	     case 7:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_4_MIRRORED;
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
-	    	 frame_length = 8192;
-	    	 currentResolution = 128; 
-	     case 8:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_128x32; //horizontal
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select128by32);
-	    	 frame_length = 8192;
-	    	 currentResolution = 128;  
-	    	 break;	 
-	     case 9:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x128; //vertical mount
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select32by128);
-	    	 frame_length = 8192;
-	    	 currentResolution = 128; 
-	    	 break;	 
-	     case 10:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_64x64;
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
-	    	 frame_length = 8192;
-	    	 currentResolution = 128;
-	    	 
-	    	 pixelRadio_.setChecked(false);
-	         superPixelRadio_.setChecked(true);
-	         pixelRadio25_.setChecked(false);
-	         superPixelRadio25_.setChecked(false);
-	    	 break;	 	 		 
-	     case 11:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-	    	 frame_length = 2048;
-	    	 currentResolution = 32;  
-	    	 
-	    	 pixelRadio_.setChecked(false);
-	         superPixelRadio_.setChecked(false);
-	         pixelRadio25_.setChecked(true);
-	         superPixelRadio25_.setChecked(false);
-	    	 break;	 
-	     case 12:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32_ColorSwap;
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-	    	 frame_length = 2048;
-	    	 currentResolution = 32; 
-	    	 break;	 	 
-	     case 13:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32;
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
-	    	 frame_length = 4096;
-	    	 currentResolution = 64; 
-	    	 break;	
-	     case 14:
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64;
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
-	    	 frame_length = 8192;
-	    	 currentResolution = 128; 
-	    	 
-	    	 pixelRadio_.setChecked(false);
-	         superPixelRadio_.setChecked(false);
-	         pixelRadio25_.setChecked(false);
-	         superPixelRadio25_.setChecked(true);
-	    	 break;	 
-	     default:	    		 
-	    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32; //v2 as the default
-	    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
-	    	 frame_length = 2048;
-	    	 currentResolution = 32;
-	     }*/
-	     
-	     
-	    /* pixelRadio_.setEnabled(false);
-         superPixelRadio_.setEnabled(false);
-         pixelRadio25_.setEnabled(false);
-         superPixelRadio25_.setEnabled(false);*/
-	     
-	     matrix_number = matrix_model;
-	         
 	     frame_ = new short [KIND.width * KIND.height];
 		 BitmapBytes = new byte[KIND.width * KIND.height *2]; //512 * 2 = 1024 or 1024 * 2 = 2048
 	
@@ -2483,14 +2534,21 @@ private void copyGIF64Source() {
     	
 		 sdIOTest.start();
     	
-    	if (matrix_model == 10 || matrix_model == 14) { //we have super pixel
+    	if (matrix_model == 10 || matrix_model == 14) { //we have SUPER PIXEL
      		
      		imagePath = GIF64Path + writeDemoFileName64 + ".gif";
      		selectedFileName = writeDemoFileName64;
      		decodedDirPath = GIF64Path + "decoded";
      	}
+    	
+    	else if (matrix_model == 1) {  //we have a CAT Clutch
+     		imagePath = GIF16Path + writeDemoFileName16 + ".gif";
+     		selectedFileName = writeDemoFileName16;
+     		decodedDirPath = GIF16Path + "decoded";
+     	}
+    	
      	else {
-     		imagePath = GIFPath + writeDemoFileName + ".gif";
+     		imagePath = GIFPath + writeDemoFileName + ".gif"; //we have normal 32x32 PIXEL
      		selectedFileName = writeDemoFileName;
      		decodedDirPath = GIFPath + "decoded";
      	}
@@ -2590,29 +2648,6 @@ private void copyGIF64Source() {
   		@Override
   		protected void setup() throws ConnectionLostException { //we'll always come back here after an intent or loss of connection
   			
-  			grove1_6 = ioio_.openDigitalInput(6, DigitalInput.Spec.Mode.PULL_UP);
-  	    	//grove1_35 = ioio_.openDigitalInput(35, DigitalInput.Spec.Mode.PULL_UP);
-  	    	
-  	    	//grove1_35 = ioio_.openAnalogInput(35);	
-  	    	
-  	    	grove2_4 = ioio_.openDigitalInput(4, DigitalInput.Spec.Mode.PULL_UP);
-  	    	grove2_5 = ioio_.openDigitalInput(5, DigitalInput.Spec.Mode.PULL_UP);
-  	    	grove3_31 = ioio_.openDigitalInput(31, DigitalInput.Spec.Mode.PULL_UP);
-  	    	//grove3_32 = ioio_.openDigitalInput(32, DigitalInput.Spec.Mode.PULL_UP);
-  	    	grove4_33 = ioio_.openDigitalInput(33, DigitalInput.Spec.Mode.PULL_UP);
-  	    	grove4_34 = ioio_.openDigitalInput(34, DigitalInput.Spec.Mode.PULL_UP);
-  	    	grove5_1 = ioio_.openDigitalInput(1, DigitalInput.Spec.Mode.PULL_UP);
-  	    	grove5_2 = ioio_.openDigitalInput(2,DigitalInput.Spec.Mode.PULL_UP);
-  	    	
-  			//button_ = ioio_.openDigitalInput(4);
-			//input_ = ioio_.openAnalogInput(33);
-			ProxInput_ = ioio_.openAnalogInput(32);
-			AlcoholInput_ = ioio_.openAnalogInput(35);
-  			
-  			//matrix_ = ioio_.openRgbLedMatrix(KIND);
-  			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
-  			connectTimer.cancel(); //we can stop this since it was found
-  	
   			//**** let's get IOIO version info for the About Screen ****
   			pixelFirmware = ioio_.getImplVersion(v.APP_FIRMWARE_VER);
   			pixelBootloader = ioio_.getImplVersion(v.BOOTLOADER_VER);
@@ -2620,6 +2655,30 @@ private void copyGIF64Source() {
   			//pixelHardwareID = ioio_.getImplVersion(v.APP_FIRMWARE_VER).substring(0,4); //quick hack, fix later
   			IOIOLibVersion = ioio_.getImplVersion(v.IOIOLIB_VER);
   			//**********************************************************
+  			
+  			if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("I")) {  //it's not a CAT Clutch, then turn on digital and analog inputs
+  				grove1_6 = ioio_.openDigitalInput(6, DigitalInput.Spec.Mode.PULL_UP);
+  	  	    	grove2_4 = ioio_.openDigitalInput(4, DigitalInput.Spec.Mode.PULL_UP);
+  	  	    	grove2_5 = ioio_.openDigitalInput(5, DigitalInput.Spec.Mode.PULL_UP);
+  	  	    	grove3_31 = ioio_.openDigitalInput(31, DigitalInput.Spec.Mode.PULL_UP);
+  	  	    	grove4_33 = ioio_.openDigitalInput(33, DigitalInput.Spec.Mode.PULL_UP);
+  	  	    	grove4_34 = ioio_.openDigitalInput(34, DigitalInput.Spec.Mode.PULL_UP);
+  	  	    	grove5_1 = ioio_.openDigitalInput(1,DigitalInput.Spec.Mode.PULL_UP);
+  	  	    	grove5_2 = ioio_.openDigitalInput(2,DigitalInput.Spec.Mode.PULL_UP);
+  				ProxInput_ = ioio_.openAnalogInput(32);
+  				AlcoholInput_ = ioio_.openAnalogInput(35);
+  			}
+  			else {  //let's hide the labels if it is a CAT Clutch IMPORTANT: Enabling analog/digital pins will crash since analog is disabled in the firmware
+  				hideTextGroveTextViews();
+  			}
+  	    	
+  	    	//grove1_35 = ioio_.openAnalogInput(35);	
+			//button_ = ioio_.openDigitalInput(4);
+			//input_ = ioio_.openAnalogInput(33);
+  	    	//grove3_32 = ioio_.openDigitalInput(32, DigitalInput.Spec.Mode.PULL_UP);
+  			
+  			deviceFound = 1; //if we went here, then we are connected over bluetooth or USB
+  			connectTimer.cancel(); //we can stop this since it was found
   		
   			 if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("0")) { //only go here if we have a firmware that is set to auto-detect, otherwise we can skip this
  	  			runOnUiThread(new Runnable() 
@@ -2645,6 +2704,7 @@ private void copyGIF64Source() {
    	  		  matrix_.frame(frame_); //stream "select image" text to PIXEL
    		   }
   			
+  		
   			if (debug_ == true) {  			
   			   showToast(pixelHardwareID);
   			}
@@ -2679,49 +2739,57 @@ private void copyGIF64Source() {
 			/*setProx(ProxInput_.read());
 			setAlcohol(AlcoholInput_.read());  in.getVoltage();*/
   			
-  			setProx(ProxInput_.getVoltage());
-  			setAlcohol(AlcoholInput_.getVoltage());
-			
-  			grove1_6_ = grove1_6.read(); 
-			//grove1_35_ = grove1_35.read(); 
-			grove2_4_ = grove2_4.read(); //IOIO pin 4
-			grove2_5_ = grove2_5.read(); 
-			grove3_31_ = grove3_31.read(); 
-			//grove3_32_ = grove3_32.read(); 
-			grove4_33_ = grove4_33.read(); 
-			grove4_34_ = grove4_34.read(); 
-			grove5_1_ = grove5_1.read(); 
-			grove5_2_ = grove5_2.read(); 
-			
-			if (grove1_6_ == true)  setGrove1_6Text(true, "1: IOIO 6 is High"); 
-			else setGrove1_6Text(false, "1: IOIO 6 is Low");
-			
-			/*if (grove1_35_ == true) setGrove1_35Text(true,"1: IOIO 35 is High");
-			else setGrove1_35Text(false,"1: IOIO 35 is Low");*/
-			
-			if (grove2_4_ == true) setGrove2_4Text(true,"2: IOIO 4 is High");
-			else setGrove2_4Text(false,"2: IOIO 4 is Low");
-			
-			if (grove2_5_ == true) setGrove2_5Text(true,"2: IOIO 5 is High");
-			else setGrove2_5Text(false,"2: IOIO 5 is Low");
-			
-			if (grove3_31_ == true) setGrove3_31Text(true,"3: IOIO 31 is High");
-			else setGrove3_31Text(false,"3: IOIO 31 is Low");
-			
-			/*if (grove3_32_ == true) setGrove3_32Text(true,"3: IOIO 32 is High");
-			else setGrove3_32Text(false,"3: IOIO 32 is Low");*/
-			
-			if (grove4_33_ == true) setGrove4_33Text(true,"4: IOIO 33 is High");
-			else setGrove4_33Text(false,"4: IOIO 33 is Low");
-			
-			if (grove4_34_ == true) setGrove4_34Text(true,"4: IOIO 34 is High");
-			else setGrove4_34Text(false,"4: IOIO 34 is Low");
-			
-			if (grove5_1_ == true) setGrove5_1Text(true,"5: IOIO 1 is High");
-			else setGrove5_1Text(false,"5: IOIO 1 is Low");
-			
-			if (grove5_2_ == true) setGrove5_2Text(true,"5: IOIO 2 is High");
-			else setGrove5_2Text(false,"5: IOIO 2 is Low");
+  			
+  			if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("I")) { //if no CAT Clutch
+  			
+	  			
+	  			setProx(ProxInput_.getVoltage());
+	  			setAlcohol(AlcoholInput_.getVoltage());
+				
+	  			grove1_6_ = grove1_6.read(); 
+				//grove1_35_ = grove1_35.read(); 
+				grove2_4_ = grove2_4.read(); //IOIO pin 4
+				grove2_5_ = grove2_5.read(); 
+				grove3_31_ = grove3_31.read(); 
+				//grove3_32_ = grove3_32.read(); 
+				grove4_33_ = grove4_33.read(); 
+				grove4_34_ = grove4_34.read(); 
+				grove5_1_ = grove5_1.read(); 
+				grove5_2_ = grove5_2.read(); 
+				
+				if (grove1_6_ == true)  setGrove1_6Text(true, "1: IOIO 6 is High"); 
+				else setGrove1_6Text(false, "1: IOIO 6 is Low");
+				
+			/*	if (grove1_35_ == true) setGrove1_35Text(true,"1: IOIO 35 is High");
+				else setGrove1_35Text(false,"1: IOIO 35 is Low");*/
+				
+				if (grove2_4_ == true) setGrove2_4Text(true,"2: IOIO 4 is High");
+				else setGrove2_4Text(false,"2: IOIO 4 is Low");
+				
+				if (grove2_5_ == true) setGrove2_5Text(true,"2: IOIO 5 is High");
+				else setGrove2_5Text(false,"2: IOIO 5 is Low");
+				
+				if (grove3_31_ == true) setGrove3_31Text(true,"3: IOIO 31 is High");
+				else setGrove3_31Text(false,"3: IOIO 31 is Low");
+				
+				/*if (grove3_32_ == true) setGrove3_32Text(true,"3: IOIO 32 is High");
+				else setGrove3_32Text(false,"3: IOIO 32 is Low");*/
+				
+				if (grove4_33_ == true) setGrove4_33Text(true,"4: IOIO 33 is High");
+				else setGrove4_33Text(false,"4: IOIO 33 is Low");
+				
+				if (grove4_34_ == true) setGrove4_34Text(true,"4: IOIO 34 is High");
+				else setGrove4_34Text(false,"4: IOIO 34 is Low");
+				
+				if (grove5_1_ == true) setGrove5_1Text(true,"5: IOIO 1 is High");
+				else setGrove5_1Text(false,"5: IOIO 1 is Low");
+				
+				if (grove5_2_ == true) setGrove5_2Text(true,"5: IOIO 2 is High");
+				else setGrove5_2Text(false,"5: IOIO 2 is Low");
+				
+  			}
+  			
+  			
 			
 			
 			Thread.sleep(100);
@@ -2817,7 +2885,34 @@ private void copyGIF64Source() {
 		});
 	}
 	
-	/*private void setGrove1_35Text(final boolean inputPin , final String str) {
+	private void hideTextGroveTextViews() {
+		
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Grove1_6TextView.setVisibility(View.GONE);
+				Grove2_4TextView.setVisibility(View.GONE);
+				Grove2_5TextView.setVisibility(View.GONE);
+				Grove3_31TextView.setVisibility(View.GONE);
+				Grove3_32TextView.setVisibility(View.GONE);
+				Grove4_33TextView.setVisibility(View.GONE);
+				Grove4_34TextView.setVisibility(View.GONE);
+				Grove5_1TextView.setVisibility(View.GONE);
+				Grove5_2TextView.setVisibility(View.GONE);
+				Grove1_35TextView.setVisibility(View.GONE);
+				Grove3_32TextView.setVisibility(View.GONE);
+			}
+		});
+		
+		
+			
+		
+		
+		
+		
+	}
+	
+	private void setGrove1_35Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -2826,7 +2921,7 @@ private void copyGIF64Source() {
 				else Grove1_35TextView.setTextColor(getResources().getColor(R.color.white));
 			}
 		});
-	}*/
+	}
 	
 	private void setGrove2_4Text(final boolean inputPin , final String str) {
 		runOnUiThread(new Runnable() {
@@ -2971,6 +3066,8 @@ private void copyGIF64Source() {
    			//now we need to read in the raw file, it's already in RGB565 format and scaled so we don't need to do any scaling
    			//Log.d("Animations","inside the decoder timer");
    			
+   			
+   			
    			File file = new File(decodedDirPath + "/" + selectedFileName + ".rgb565");
    			if (file.exists()) {
    				
@@ -3006,6 +3103,8 @@ private void copyGIF64Source() {
 						e.printStackTrace();
 					} 
 	   			}
+				
+				//Log.d("test","selected res: " + selectedFileResolution);
 				
 				 switch (selectedFileResolution) {
 		            case 16: frame_length = 1024;
