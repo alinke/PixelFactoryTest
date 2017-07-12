@@ -6,9 +6,10 @@
   
     <item>PIXEL V2</item>
     <item>SUPER PIXEL V2</item>
-    <item>PIXEL V2.5</item>
+    <item>PIXEL V2.5 Frame or Makers Kit</item>
     <item>SUPER PIXEL V2.5</item>
     <item>CAT Clutch</item>
+    <item>PIXEL V2 Color Swap</item>
 </string-array>
 	
 <string-array name="matrix_values">
@@ -17,6 +18,7 @@
     <item>11</item>
     <item>14</item>
     <item>1</item>
+    <item>20</item>
 </string-array>
 
   <string-array name="FPSOverride_options">

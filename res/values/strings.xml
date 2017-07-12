@@ -12,7 +12,7 @@
     <string name="HardwareVersionString">Hardware Version</string> 
     
    <string name="oneTimeSetupString">One Time Setup: Copying animations to your SD card.</string> 
-   <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000 or 4545 for PIXEL V1."</string> 
+   <string name="bluetoothPairingString">Did you Bluetooth pair to PIXEL? The pairing code is: 0000"</string> 
    
    <string name="menu_instructions_title">Instructions</string>
   
@@ -37,7 +37,7 @@
     <string name="artURL2">pixeljoint.com</string> 
     <string name="artURL3">pixeljoint.com</string> 
     
-    <string name="menu_btPair_title">Bluetooth Pair PIXEL | Code 0000 or 4545</string>   
+    <string name="menu_btPair_title">Bluetooth Pair PIXEL | Code 0000</string>   
     
     <string name="fps_override">fps_override</string>
     <string name="FPSOverrideTitle">Frames per Second</string>
@@ -46,7 +46,7 @@
     <string name="FPSOverrideDefault">0</string>  
     
     <string name="bluetooth_pair">Blueooth Pairing</string>
-    <string name="bluetooth_pairSummary">Shortcut to the Bluetooth settings screen. Pair to PIXEL using code: 0000 or 4545 for PIXEL V1 units</string>
+    <string name="bluetooth_pairSummary">Shortcut to the Bluetooth settings screen. Pair to PIXEL using code: 0000</string>
     
     <string name="slideShowtitle">Slide Show Settings</string>
     <string name="slideShowtitleSummary">Slide Show Settings</string>
@@ -138,7 +138,7 @@
      <string name="Yes">Yes</string>
      <string name="No">No</string>
      <string name="RunningWhiteTest">Visually check that all LEDs are white</string>
-     <string name="setupInstructionsString">This app is used by the factory to test PIXEL\'s LED panel, IO connections, and writes a default animations to PIXEL\'s onboard microSD card. First Bluetooth pair to PIXEL using code 0000 or 4545 for PIXEL V1.\n\n</string>
+     <string name="setupInstructionsString">This app is used by the factory to test PIXEL\'s LED panel, IO connections, and writes a default animations to PIXEL\'s onboard microSD card. First Bluetooth pair to PIXEL using code 0000\n\n</string>
     
     <string name="ioTest_and_sdWrite">SD card write in progress, you may test the IO ports while the SD card is writing</string>
     <string name="correctFirmwareMsg">is the latest firmware version</string>
@@ -149,7 +149,7 @@
     
   <string name="selected_matrix">selected_matrix</string>
     <string name="matrix">LED Panel Type Selection</string>
-    <string name="matrixSummary">Select PIXEL 32x32 or SUPER PIXEL 64x64 or CAT Clutch</string>    
+    <string name="matrixSummary">Select PIXEL 2.5 32x32 or SUPER PIXEL 64x64 or CAT Clutch</string>    
     <string name="dialogTitleMatrix">LED Panel Type Selection</string>
     <string name="matrix_default_value">11</string> 
     

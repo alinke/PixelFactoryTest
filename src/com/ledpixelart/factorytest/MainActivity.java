@@ -145,7 +145,6 @@ import java.util.UUID;
 //import android.support.v7.app.ActionBar;
 //import android.support.v7.app.ActionBarActivity;
 
-
 //to do , think about deleting the decoded directory if led panel size changed
 
 @SuppressLint({ "ParserError", "ParserError" })
@@ -198,6 +197,7 @@ public class MainActivity extends IOIOActivity  {
     private static String whiteTestFileName = "whitetest";
     private static String whiteTestFileName64 = "whitetest64";
     private static String whiteTestFileName16 = "whitetest16";
+    private static String whiteTestFileName16b = "whitetest16b";
     
     private static String writeDemoFileName = "writedemo";
     private static String writeDemoFileName64 = "writedemo64";
@@ -298,7 +298,7 @@ public class MainActivity extends IOIOActivity  {
 	private static MediaPlayer alertSound;
 	private static MediaPlayer restartApp;
 	private int height;
-	private String CurrentFirmwareVersion = "PIXL0008";
+	//private String CurrentFirmwareVersion = "PIXL0008";
 	private OnSharedPreferenceChangeListener matrixChangedListener;
 	
 	
@@ -401,7 +401,7 @@ public class MainActivity extends IOIOActivity  {
 			    	 pixelModelTextView.setText("PIXEL V2 SUPER PIXEL 64x64");
 			    }
 			   
-			    else if (matrix_model == 1) { //it's super pixel
+			    else if (matrix_model == 1) { //it's a CAT Clutch
 			    	/* pixelRadio_.setChecked(false);
 			         superPixelRadio_.setChecked(true);
 			         pixelRadio25_.setChecked(false);
@@ -422,6 +422,13 @@ public class MainActivity extends IOIOActivity  {
 			         pixelRadio25_.setChecked(false);
 			         superPixelRadio25_.setChecked(true);*/
 			    	 pixelModelTextView.setText("PIXEL V2.5 SUPER PIXEL 64x64");
+			    }
+			    else if (matrix_model == 20) {
+			    	 /*pixelRadio_.setChecked(false);
+			         superPixelRadio_.setChecked(false);
+			         pixelRadio25_.setChecked(false);
+			         superPixelRadio25_.setChecked(true);*/
+			    	 pixelModelTextView.setText("PIXEL V2.0 Color Swap 32x32");
 			    }
 			    else {
 			    	
@@ -1073,7 +1080,8 @@ private void copyGIF16() {
 			showToast(getString(R.string.RunningWhiteTest));
 	     	animateAfterDecode(0);*/
 	     	
-	     	if (matrix_model == 10 || matrix_model == 14) { //we have super pixel 64x64
+	  	     
+	  	    if (matrix_model == 10 || matrix_model == 14) { //we have super pixel 64x64
 	     		imagePath = GIF64Path + whiteTestFileName64 + ".gif";
 	     		selectedFileName = whiteTestFileName64;
 	     		decodedDirPath = GIF64Path + "decoded";
@@ -2314,11 +2322,18 @@ private void copyGIF16() {
 			    	 currentResolution = 32;
 			    	 
 			    	 pixelModelTextView.setText("PIXEL V2 32x32 Autodetected");
-			    	 
-			    	/* pixelRadio_.setChecked(true);
-			         superPixelRadio_.setChecked(false);
-			         pixelRadio25_.setChecked(false);
-			         superPixelRadio25_.setChecked(false);*/
+	    	 	}
+		  		
+	    	 	else if (pixelHardwareID.substring(4,5).equals("Z")) {
+	    	 		matrix_model = 11;
+	    	 		KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_32x32;
+			    	BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	frame_length = 2048;
+			    	currentResolution = 32; 
+			    	
+			    	pixelModelTextView.setText("PIXEL 2.5 Frame with iOS Autodetected");
+			    	
+			    
 			         
 	    	 	}
 	    	 	else if (pixelHardwareID.substring(4,5).equals("N")) { 
@@ -2342,7 +2357,7 @@ private void copyGIF16() {
 			         pixelRadio25_.setChecked(true);
 			         superPixelRadio25_.setChecked(false);*/
 			         
-			         pixelModelTextView.setText("PIXEL 2.5 Maker's Kit 32x32");
+			         pixelModelTextView.setText("PIXEL 2.5 Maker's Kit 32x32 or PIXEL 2.5 Frame");
 	    	 	}
 	  		}	
 	  
@@ -2490,7 +2505,35 @@ private void copyGIF16() {
 			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage64by16);
 			    	 frame_length = 2048;
 			    	 currentResolution = 6416; 
-			    	 break;	 	 		 
+			    	 break;	
+			     case 18:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x32_ColorSwap;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by32);
+			    	 frame_length = 4096;
+			    	 currentResolution = 64; 
+			    	 break;	
+			     case 19:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ADAFRUIT_64x64_ColorSwap;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.select64by64);
+			    	 frame_length = 8192;
+			    	 currentResolution = 128; 
+			    	 break;
+			     case 20:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32_ColorSwap;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32;
+			    	 pixelModelTextView.setText("PIXEL V2.0 COLOR SWAP");
+			    	 break;
+			     case 21:
+			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.ALIEXPRESS_RANDOM1_32x32;
+			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
+			    	 frame_length = 2048;
+			    	 currentResolution = 32;
+			    	 break;	 
+			    	 
+			    	 
+			    	 
 			     default:	    		 
 			    	 KIND = ioio.lib.api.RgbLedMatrix.Matrix.SEEEDSTUDIO_32x32; //v2 as the default
 			    	 BitmapInputStream = getResources().openRawResource(R.raw.selectimage32);
@@ -2542,8 +2585,19 @@ private void copyGIF16() {
      	}
     	
     	else if (matrix_model == 1) {  //we have a CAT Clutch
-     		imagePath = GIF16Path + writeDemoFileName16 + ".gif";
-     		selectedFileName = writeDemoFileName16;
+     		//imagePath = GIF16Path + writeDemoFileName16 + ".gif";
+     		
+     		
+     		if (pixelHardwareID.substring(4,5).equals("I")) { //then it's a cat clutch and we're going to write a different file
+     			imagePath = GIF16Path + whiteTestFileName16b + ".gif";
+     			selectedFileName = whiteTestFileName16b;
+	  		}
+     		else {
+     			imagePath = GIF16Path + writeDemoFileName16 + ".gif";
+     			selectedFileName = writeDemoFileName16;
+     		}
+     		
+     		//selectedFileName = writeDemoFileName16;
      		decodedDirPath = GIF16Path + "decoded";
      	}
     	
@@ -2656,7 +2710,7 @@ private void copyGIF16() {
   			IOIOLibVersion = ioio_.getImplVersion(v.IOIOLIB_VER);
   			//**********************************************************
   			
-  			if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("I")) {  //it's not a CAT Clutch, then turn on digital and analog inputs
+  			if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("I") && !pixelHardwareID.substring(4,5).equals("Z")) {  //it's not a CAT Clutch or iOS pixel frame, then turn on digital and analog inputs
   				grove1_6 = ioio_.openDigitalInput(6, DigitalInput.Spec.Mode.PULL_UP);
   	  	    	grove2_4 = ioio_.openDigitalInput(4, DigitalInput.Spec.Mode.PULL_UP);
   	  	    	grove2_5 = ioio_.openDigitalInput(5, DigitalInput.Spec.Mode.PULL_UP);
@@ -2740,7 +2794,7 @@ private void copyGIF16() {
 			setAlcohol(AlcoholInput_.read());  in.getVoltage();*/
   			
   			
-  			if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("I")) { //if no CAT Clutch
+  			if (pixelHardwareID.substring(0,4).equals("PIXL") && !pixelHardwareID.substring(4,5).equals("I") && !pixelHardwareID.substring(4,5).equals("Z")) { //if no CAT Clutch
   			
 	  			
 	  			setProx(ProxInput_.getVoltage());
